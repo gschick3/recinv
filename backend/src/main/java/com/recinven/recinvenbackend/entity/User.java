@@ -1,9 +1,16 @@
 package com.recinven.recinvenbackend.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.Objects;
 
+@Getter
+@Setter
+@NoArgsConstructor
 @Entity
 @Table(name = "users")
 public class User {
@@ -20,50 +27,8 @@ public class User {
     @Column(name = "date_format", length = 10)
     private String dateFormat;
     @Column(name = "pass_hash", nullable = false)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY) // stop from displaying in JSON responses
     private String password;
-
-    public User() {}
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getDateFormat() {
-        return dateFormat;
-    }
-
-    public void setDateFormat(String dateFormat) {
-        this.dateFormat = dateFormat;
-    }
-
-    public void setPassword(String passHash) {
-        // Do hashing here?
-        this.password = passHash;
-    }
 
     @Override
     public boolean equals(Object o) {
