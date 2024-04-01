@@ -10,5 +10,5 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 @Mapper(componentModel = "spring")
 public interface UserMapper {
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    void updateCustomerFromDto(UserDto dto, @MappingTarget User entity);
+    void updateUserFromDto(UserDto dto, @MappingTarget User user);
 }
