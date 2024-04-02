@@ -31,6 +31,9 @@ body{
     background-color: #f8f4f0;
     color: black;
 }
+.margin-top{
+    margin-top: 3rem;
+}
 
 .container{
     display: flex;

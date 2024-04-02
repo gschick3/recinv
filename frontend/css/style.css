@@ -46,6 +46,10 @@
   /* color: #597d7d;} */
 
 html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
   font-family: sans-serif;
   line-height: 1.15;
   -webkit-text-size-adjust: 100%;
