@@ -1,0 +1,55 @@
+/*could be changed in style.css to apply to all*/
+/*sets the color of navigation sections*/
+.navbar-light .navbar-nav .nav-link{
+    color: #80aaa5;
+}
+
+/*could be changed in style.css to apply to all*/
+/*sets the color of navigation sections*/
+.navbar-light .navbar-nav .nav-link.active{
+    color: #597d7d;
+}
+
+body{
+    background: white;
+}
+h1{
+    font-family: 'Lato';
+    margin: 1rem;
+    margin-left: 2rem;
+}
+.pagetitle{
+    margin-top:30px;
+    margin-left:30px;
+}
+
+.setting-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+}
+.padding{
+    margin-top:50px;
+    margin-left: 46px;
+
+}
+.item{
+    margin-right: 150px;
+}
+.setting-form{
+    height:2.6rem;
+    width: 23rem;
+    margin-bottom: 1.5rem;
+
+}
+.text{
+    color: #597D7D;
+    font-size: 1.2rem;
+}
+.pencil-style{
+    font-size: 24px;
+    color: #80aaa5;
+}
+.placeholder-style{
+    font-weight: bold;
+}

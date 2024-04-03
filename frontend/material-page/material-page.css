@@ -1,0 +1,200 @@
+/*could be changed in style.css to apply to all*/
+/*sets the color of navigation sections*/
+.navbar-light .navbar-nav .nav-link{
+    color: #80aaa5;
+}
+
+/*could be changed in style.css to apply to all*/
+/*sets the color of navigation sections*/
+.navbar-light .navbar-nav .nav-link.active{
+    color: #597d7d;
+}
+
+body{
+    background: white;
+}
+
+h1{
+    font-family: 'Lato';
+    margin: 1rem;
+    margin-left: 2rem;
+}
+
+/*sets up the backing for table*/
+.tableOverall{
+    display: flex; 
+    flex-direction: row;
+    background-color: #597d7d;
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    width: 90%;
+    margin: auto;
+    border-radius: 25px;
+}
+    /* height: 100%; */   /*this mess with my transaction tables for some reasons :(
+    justify-content: space-between;
+
+
+/*sets the size and placement of material information*/
+.tableItem{
+    width: 95%;
+    height: 42rem;
+    margin-bottom: 0px;
+    padding-right: .5rem;
+    overflow-y:scroll;
+    scrollbar-color: #b2cdc0 #fcfaf8;
+}
+
+.ps__thumb-x{
+    color: pink;
+}
+
+/*adds the curve to the header*/
+thead th:first-child{
+    border-top-left-radius: 15px;
+    border-bottom-left-radius: 15px;
+}
+
+/*adds the curve to the header*/
+thead th:last-child{
+    border-top-right-radius: 15px;
+    border-bottom-right-radius: 15px;
+}
+
+/*adds the curve to each material info*/
+tbody th{
+    border-top-left-radius: 15px;
+    border-bottom-left-radius: 15px;
+}
+
+/*adds the curve to each material info*/
+tbody td:last-child{
+    border-top-right-radius: 15px;
+    border-bottom-right-radius: 15px;
+}
+
+/*adjusts the color of header*/
+.table thead{
+    background-color: #80AAA5;
+    color: white;
+    position:sticky;top:0;
+}
+
+/*adjusts the font weight to match rest of table*/
+.table th{
+    font-weight:normal;
+}
+
+/*adjusts the height of the material info*/
+/*sets the color of material information*/
+.tableInfo th{
+    padding-top: .25rem;
+    padding-bottom: .25rem;
+    background-color: white;
+}
+
+/*adjusts the height of the material info*/
+/*sets the color of material information*/
+.tableInfo td{
+    padding-top: .25rem;
+    padding-bottom: .25rem;
+    background-color: white;
+}
+
+/*sets the size of the dropdown column*/
+.arrowdown{
+    width: 3rem;
+}
+
+/*sets the size of the edit column*/
+.edit{
+    width: 3rem;
+}
+
+.editIcon{
+    color:#80aaa5;
+}
+
+.editIcon:hover{
+    color:#b2cdc0;
+}
+
+/*adjusts the containter size of add button*/
+.addInfo{
+    width: 3rem;
+    height:3rem;
+    color: white;
+}
+
+/*sets up the table navigation*/
+.tableSide{
+    justify-content: center;
+    width: 3rem;
+}
+
+/*adjusts the bottom of the table so it doesn't look weird*/
+.table{
+    margin-bottom: 0rem;
+}
+
+/*allows the spaces between material information*/
+.spacer{
+    background-color: transparent;
+}
+
+.modal{
+    width: 60%;
+    height: 50%;
+    margin: auto;
+    background-color: #597d7d;
+    border-radius: 25px;
+}
+
+.modal-dialog{
+    max-width: 95%;
+    height:88%;
+    padding: 0px;
+}
+
+.modal-content{
+    border-radius: 25px; 
+    height:100%;
+    padding:0px;
+}
+
+.modal-title{
+    margin-left: 21rem;
+}
+
+.modal-body{
+    margin-top: 3.25rem;
+}
+
+.modal-footer{
+    justify-content: center;
+}
+
+.form-control-plaintext{
+    border-width: 2px;
+    border-color: #a6a6a6;
+    border-radius: 15px;
+}
+
+.form-group{
+    justify-content: center;
+}
+
+.btn{
+    padding:0;
+}
+
+.btn:hover{
+    border-color:#b2cdc0;
+}
+
+.btn.btn-primary{
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
