@@ -6,15 +6,25 @@
     top:-17px;
     color: #597d7d;
 } */
-
+body{
+    background: white;
+}
+h1 {
+    font-family: 'Lato';
+    margin: 1rem;
+    margin-left: 2rem;
+}
+.bold-text{
+    font-weight: bold;
+}
 .transaction-box{
-    background: #F8f4f0;
-    border-style:solid;
+    /* background: #F8f4f0;
+    border-style:solid; */
     border-radius: 25px;
     border-width:3px;
     border-color:#F8f4f0;
     padding: 20px;
-    height: 80%;
+    height: 75%;
     margin: 0 60px 0 60px;
   
 }
@@ -24,15 +34,15 @@
 }
 
 .transaction-list {
-    background: #F8f4f0;
-    border-style:solid;
+    background: #f8f4f0b8;
+    border-style: solid;
     border-radius: 25px;
-    border-width:8px;
-    border-color:#7FA9A4;
+    border-width: 15px;
+    border-color: #7FA9A4;
     padding: 0px 20px 20px 20px;
     height: 90%;
-    overflow:hidden;
-    overflow-y:scroll;
+    overflow: hidden;
+    overflow-y: scroll;
 }
 
 .transaction-body {
