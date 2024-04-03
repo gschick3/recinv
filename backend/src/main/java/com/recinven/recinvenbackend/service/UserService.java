@@ -22,15 +22,15 @@ import java.util.List;
 @Service
 public class UserService {
     private final UserRepository userRepository;
-    private final UserMapper mapper;
+    private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtUtils jwtUtils;
 
     @Autowired
-    public UserService(UserRepository userRepository, UserMapper mapper, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, JwtUtils jwtUtils) {
+    public UserService(UserRepository userRepository, UserMapper userMapper, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, JwtUtils jwtUtils) {
         this.userRepository = userRepository;
-        this.mapper = mapper;
+        this.userMapper = userMapper;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
         this.jwtUtils = jwtUtils;
@@ -45,13 +45,13 @@ public class UserService {
     }
 
     @Transactional
-    public User updateById(Long userId, UserDto dto) {
-        if (dto.password != null) {
-            dto.password  = passwordEncoder.encode(dto.password);
+    public User updateById(Long userId, UserDto userDto) {
+        if (userDto.password != null) {
+            userDto.password  = passwordEncoder.encode(userDto.password);
         }
         return userRepository.findById(userId)
                 .map(user -> {
-                    mapper.updateCustomerFromDto(dto, user);
+                    userMapper.updateUserFromDto(userDto, user);
                     return userRepository.save(user);
                 })
                 .orElseThrow(() -> new UserNotFoundException(userId));
