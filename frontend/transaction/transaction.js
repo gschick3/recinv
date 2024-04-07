@@ -16,6 +16,21 @@ let data = [
                 "desc": "Nautro pins",
                 "qty": 3,
                 "cost": 23.42
+            },
+            {
+                "desc": "Nautro sticker",
+                "qty": 1, 
+                "cost": 0
+            },
+            {
+                "desc": "Filler",
+                "qty": 1, 
+                "cost": 0
+            }, 
+            {
+                "desc": "Filler", 
+                "qty": 1, 
+                "cost": 0
             }
         ]
     },

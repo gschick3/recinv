@@ -32,7 +32,6 @@ h1{
     width: 90%;
     margin: auto;
     border-radius: 25px;
-    /* height: 100%; */ /*this mess with my transaction tables for some reasons :(
     justify-content: space-between;
 }
 
@@ -43,7 +42,6 @@ h1{
     margin-bottom: 0px;
     padding-right: .5rem;
     overflow-y:scroll;
-    scrollbar-color: #b2cdc0 #fcfaf8;
 }
 
 /*adds the curve to the header*/
@@ -218,4 +216,22 @@ select.form-control{
 
 .editIcon:hover{
     color:#b2cdc0;
-}}
+}
+
+.itemDescription{
+    margin: auto;
+    width: 70%;
+}
+
+.itemDescriptionText{
+    display: flex;
+    justify-content: space-between;
+}
+
+.costTotal{
+    display: flex;
+    float: right;
+    margin-top: 2rem;
+    margin-right: 2rem;
+    color: #597d7d;
+}
