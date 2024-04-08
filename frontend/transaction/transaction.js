@@ -456,8 +456,8 @@ function openWithdrawPopup(e) {
     if ( !e ){ e = window.Event };
     /// fallback support for IE .srcElement
     // alert( 'Clicked! ' + ( e.target ? e.target : e.srcElement ) );
-    popupDeposit(getDataById(withdrawData, this.id))
-    depositPopup.classList.add("show");
+    popupWithdraw(getDataById(withdrawData, this.id))
+    withdrawPopup.classList.add("show");
 }
 
 function getDataById(dataItem, id) {
@@ -473,11 +473,19 @@ function closePopup() {
     depositPopup.classList.remove(
         "show"
     );
+
+    withdrawPopup.classList.remove(
+        "show"
+    );
 }
 
 function closeWindow(event) {
     if (event.target == depositPopup) {
         depositPopup.classList.remove(
+            "show"
+        );
+    } else if (event.target == withdrawPopup) {
+        withdrawPopup.classList.remove(
             "show"
         );
     }
@@ -489,7 +497,6 @@ function popupDeposit(dataItem) {
     dataItem.items.forEach((item,i) => {
         let liItem = document.createElement("li");
         liItem.setAttribute("class", "info")
-        // ulItem.appendChild = liItem;
         liItem.innerHTML = `${i+1}.<span class="card item fill">${item.desc}</span> <span class="card item">${item.qty}</span>`;
         ulItem.appendChild(liItem);
     });
@@ -510,8 +517,78 @@ function popupDeposit(dataItem) {
     `
     depositBody.innerHTML = bodyText;
     closeDepositPopup.addEventListener("click", closePopup);
+}
+
+function popupWithdraw(dataItem) {
+    
+    let ulItem = document.createElement("ul");
+    ulItem.setAttribute("id", "InputItemsList")
+    ulItem.appendChild(appendItem(1));
+    ulItem.appendChild(appendAddBtn());
+
+
+    let bodyText = `
+        <h3>Purchase Information</h3>
+        <div class="info">
+            <div class="info-data">${dataItem.date}</div>
+            <div class="info-data">${dataItem.service}</div>
+        </div>
+        <h5>Item(s) Sold</h5>
+        <div class="card item-info item-box">
+            <ul id="itemList"></ul>
+            ${ulItem.outerHTML}
+        </div>
+        <button id="closeWithdrawPopup">OK</button>
+    `
+    withdrawBody.innerHTML = bodyText;
+    addRow.addEventListener("click", addToList);
+    closeWithdrawPopup.addEventListener("click", closePopup); // TODO: Make this an OK button and grab all value for submission
+}
+
+function addToList() {
+    let ul = document.getElementById("InputItemsList");
+    let li = ul.getElementsByTagName("li");
+
+    let lastItem = li[li.length - 1]; // because of zero index
+    let newItem = appendItem(li.length);
+    lastItem.innerHTML = newItem.innerHTML;
+
+    ul.appendChild(appendAddBtn());
+    addRow.addEventListener("click", addToList);
 
 }
+
+function appendItem(id) {
+    let liItem = document.createElement("li");
+    liItem.setAttribute("class", "info")
+    liItem.innerHTML = `
+        <div class="withdraw-form">
+            <select class="form-control dropdown" id="InputType${id}">
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+                <option>4</option>
+                <option>5</option>
+            </select>
+            <input type="number" class="form-control value" id="InputCost${id}" aria-label="Cost" placeholder="Cost">
+            <input type="number" class="form-control value" id="InputAmount${id}" placeholder="Amount">
+        </div>
+    `;
+
+    return liItem;
+}
+
+function appendAddBtn() {
+    let liAddBtn = document.createElement("li");
+    liAddBtn.setAttribute("class", "info")
+    liAddBtn.innerHTML = `
+        <div class="withdraw-form">
+            <button class="btn btn-primary" id="addRow" type="submit">+</button>
+        </div>
+    `;
+    return liAddBtn;
+}
+
 
 
 (function() {
@@ -544,16 +621,7 @@ function popupDeposit(dataItem) {
     
     
     window.addEventListener("click",closeWindow);
-
-    // var elems = document.getElementsByTagName('li');
-    // var elems = document.getElementById('itemId')
-    // Array.from(elems).forEach((v,i) => v.addEventListener('click', function() {
-    //     console.log("dog", elems)
-    //     console.log(data[i])
-    //     popupDeposit(data[i])
-    // }));
-    
-    
+      
 })();
 
 

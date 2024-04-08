@@ -1,16 +1,19 @@
 package com.recinven.recinvenbackend.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Objects;
+import java.util.Set;
 
 @Getter
 @Setter
 @NoArgsConstructor
+@EqualsAndHashCode
 @Entity
 @Table(name = "users")
 public class User {
@@ -30,25 +33,13 @@ public class User {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY) // stop from displaying in JSON responses
     private String password;
 
-    @Override
-    public boolean equals(Object o) {
-        if (!(o instanceof User u)) {
-            return false;
-        }
-        if (this == u) {
-            return true;
-        }
-        return (Objects.equals(this.userId, u.userId));
-    }
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
+    private Set<Product> products;
 
     @Override
     public String toString() {
         return String.format("Required: email [%s], name [%s], password (hidden) | Optional: phone: [%s], dateFormat: [%s]", email, name, phone, dateFormat);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(userId, email, name);
     }
 }
 

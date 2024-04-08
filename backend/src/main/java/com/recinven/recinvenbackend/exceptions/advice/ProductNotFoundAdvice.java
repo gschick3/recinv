@@ -1,6 +1,6 @@
 package com.recinven.recinvenbackend.exceptions.advice;
 
-import com.recinven.recinvenbackend.exceptions.exception.InvalidRequestException;
+import com.recinven.recinvenbackend.exceptions.exception.ProductNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -8,11 +8,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ControllerAdvice
-public class InvalidRequestAdvice {
+public class ProductNotFoundAdvice {
     @ResponseBody
-    @ExceptionHandler(InvalidRequestException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    String invalidRequestHandler(InvalidRequestException e) {
+    @ExceptionHandler(ProductNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    String productNotFoundHandler(ProductNotFoundException e) {
         return e.getMessage();
     }
 }

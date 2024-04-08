@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static org.springframework.hateoas.server.core.DummyInvocationUtils.methodOn;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
 @RestController
@@ -28,7 +28,6 @@ public class UserController {
         this.userService = userService;
     }
 
-    // tag::get-aggregate-root[]
     @GetMapping
     public ResponseEntity<?> all() {
         List<EntityModel<User>> users = userService.findAll().stream()
@@ -36,7 +35,6 @@ public class UserController {
                 .toList();
         return ResponseEntity.ok(CollectionModel.of(users, linkTo(methodOn(UserController.class).all()).withSelfRel()));
     }
-    // end::get-aggregate-root[]
 
     @GetMapping("/{userId}")
     public ResponseEntity<?> one(@PathVariable Long userId) {
@@ -46,8 +44,8 @@ public class UserController {
     }
 
     @PutMapping("/{userId}")
-    ResponseEntity<?> updateUser(@PathVariable Long userId, @RequestBody UserDto dto) {
-        User updatedUser = userService.updateById(userId, dto);
+    ResponseEntity<?> update(@PathVariable Long userId, @RequestBody UserDto userDto) {
+        User updatedUser = userService.updateById(userId, userDto);
 
         EntityModel<User> userEntityModel = userModelAssembler.toModel(updatedUser);
         return ResponseEntity.created(userEntityModel.getRequiredLink(IanaLinkRelations.SELF).toUri())
@@ -55,7 +53,7 @@ public class UserController {
     }
 
     @DeleteMapping( "/{userId}")
-    ResponseEntity<?> deleteUser(@PathVariable Long userId) {
+    ResponseEntity<?> delete(@PathVariable Long userId) {
         userService.deleteById(userId);
 
         return ResponseEntity.noContent().build();
