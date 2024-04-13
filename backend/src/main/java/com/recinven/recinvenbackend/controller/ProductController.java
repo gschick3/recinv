@@ -48,11 +48,11 @@ public class ProductController {
 
     @PostMapping("/new")
     public ResponseEntity<?> create(@PathVariable Long userId, @RequestBody Product product) {
+        product.setUser(userService.findById(userId));
+
         if (productService.existsByDescription(product)) {
             return ResponseEntity.badRequest().body(String.format("User %d already has a product with description: %s", product.getUser().getUserId(), product.getDescription()));
         }
-
-        product.setUser(userService.findById(userId));
 
         EntityModel<Product> productEntityModel = productModelAssembler.toModel(productService.create(product));
         return ResponseEntity.created(productEntityModel.getRequiredLink(IanaLinkRelations.SELF).toUri())
