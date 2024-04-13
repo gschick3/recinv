@@ -22,7 +22,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
-@RequestMapping(path = "/users/{userId}/products/{productId}")
+@RequestMapping(path = "/users/{userId}/products/{productId}/materials")
 public class ProductMaterialController {
     private final ProductMaterialModelAssembler productMaterialModelAssembler;
     private final ProductMaterialService productMaterialService;
@@ -37,7 +37,7 @@ public class ProductMaterialController {
         this.materialService = materialService;
     }
 
-    @GetMapping("/materials")
+    @GetMapping
     public ResponseEntity<?> all(@PathVariable Long userId, @PathVariable Long productId) {
         List<EntityModel<ProductMaterial>> productMaterials = productMaterialService.findAllByProduct(userId, productId)
                 .stream()
@@ -56,7 +56,7 @@ public class ProductMaterialController {
         return ResponseEntity.ok(productMaterialModelAssembler.toModel(productMaterial));
     }
 
-    @PostMapping("/add-material/{materialId}")
+    @PostMapping("/{materialId}")
     public ResponseEntity<?> create(@PathVariable Long userId, @PathVariable Long productId, @PathVariable Long materialId, @RequestBody ProductMaterial productMaterial) {
         productMaterial.setProduct(productService.findById(userId, productId));
         productMaterial.setMaterial(materialService.findById(userId, materialId));
