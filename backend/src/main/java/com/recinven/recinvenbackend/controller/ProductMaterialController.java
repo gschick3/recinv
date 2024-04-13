@@ -22,7 +22,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
-@RequestMapping(path = "/users/{userId}/products/{productId}/materials")
+@RequestMapping(path = "/users/{userId}/recipes", params = "productId")
 public class ProductMaterialController {
     private final ProductMaterialModelAssembler productMaterialModelAssembler;
     private final ProductMaterialService productMaterialService;
@@ -38,7 +38,7 @@ public class ProductMaterialController {
     }
 
     @GetMapping
-    public ResponseEntity<?> all(@PathVariable Long userId, @PathVariable Long productId) {
+    public ResponseEntity<?> all(@PathVariable Long userId, @RequestParam Long productId) {
         List<EntityModel<ProductMaterial>> productMaterials = productMaterialService.findAllByProduct(userId, productId)
                 .stream()
                 .map(productMaterialModelAssembler::toModel)
@@ -46,8 +46,8 @@ public class ProductMaterialController {
         return ResponseEntity.ok(CollectionModel.of(productMaterials, linkTo(methodOn(ProductMaterialController.class).all(userId, productId)).withSelfRel()));
     }
 
-    @GetMapping("/{materialId}")
-    public ResponseEntity<?> one(@PathVariable Long userId, @PathVariable Long productId, @PathVariable Long materialId) {
+    @GetMapping(params = "materialId")
+    public ResponseEntity<?> one(@PathVariable Long userId, @RequestParam Long productId, @RequestParam Long materialId) {
         Product product = productService.findById(userId, productId);
         Material material = materialService.findById(userId, materialId);
 
@@ -56,8 +56,8 @@ public class ProductMaterialController {
         return ResponseEntity.ok(productMaterialModelAssembler.toModel(productMaterial));
     }
 
-    @PostMapping("/{materialId}")
-    public ResponseEntity<?> create(@PathVariable Long userId, @PathVariable Long productId, @PathVariable Long materialId, @RequestBody ProductMaterial productMaterial) {
+    @PostMapping(params = "materialId")
+    public ResponseEntity<?> create(@PathVariable Long userId, @RequestParam Long productId, @RequestParam Long materialId, @RequestBody ProductMaterial productMaterial) {
         productMaterial.setProduct(productService.findById(userId, productId));
         productMaterial.setMaterial(materialService.findById(userId, materialId));
 
@@ -66,8 +66,8 @@ public class ProductMaterialController {
                 .body(productMaterialEntityModel);
     }
 
-    @PutMapping("/{materialId}")
-    public ResponseEntity<?> update(@PathVariable Long userId, @PathVariable Long productId, @PathVariable Long materialId, @RequestBody ProductMaterialDto productMaterialDto) {
+    @PutMapping(params = "materialId")
+    public ResponseEntity<?> update(@PathVariable Long userId, @RequestParam Long productId, @RequestParam Long materialId, @RequestBody ProductMaterialDto productMaterialDto) {
         Product product = productService.findById(userId, productId);
         Material material = materialService.findById(userId, materialId);
         ProductMaterial updatedProductMaterial = productMaterialService.updateById(userId, new ProductMaterialId(product, material), productMaterialDto);
@@ -77,8 +77,8 @@ public class ProductMaterialController {
                 .body(productMaterialEntityModel);
     }
 
-    @DeleteMapping("/{materialId}")
-    public ResponseEntity<?> delete(@PathVariable Long userId, @PathVariable Long productId, @PathVariable Long materialId) {
+    @DeleteMapping(params = "materialId")
+    public ResponseEntity<?> delete(@PathVariable Long userId, @RequestParam Long productId, @RequestParam Long materialId) {
         Product product = productService.findById(userId, productId);
         Material material = materialService.findById(userId, materialId);
         productMaterialService.deleteById(userId, new ProductMaterialId(product, material));

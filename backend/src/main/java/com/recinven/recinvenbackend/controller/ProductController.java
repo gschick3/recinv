@@ -39,8 +39,8 @@ public class ProductController {
         return ResponseEntity.ok(CollectionModel.of(products, linkTo(methodOn(ProductController.class).all(userId)).withSelfRel()));
     }
 
-    @GetMapping("/{productId}")
-    public ResponseEntity<?> one(@PathVariable Long userId, @PathVariable Long productId) {
+    @GetMapping(params = "productId")
+    public ResponseEntity<?> one(@PathVariable Long userId, @RequestParam Long productId) {
         Product product = productService.findById(userId, productId);
 
         return ResponseEntity.ok(productModelAssembler.toModel(product));
@@ -59,8 +59,8 @@ public class ProductController {
                 .body(productEntityModel);
     }
 
-    @PutMapping("/{productId}")
-    public ResponseEntity<?> update(@PathVariable Long userId, @PathVariable Long productId, @RequestBody ProductDto productDto) {
+    @PutMapping(params = "productId")
+    public ResponseEntity<?> update(@PathVariable Long userId, @RequestParam Long productId, @RequestBody ProductDto productDto) {
         Product updatedProduct = productService.updateById(userId, productId, productDto);
 
         EntityModel<Product> productEntityModel = productModelAssembler.toModel(updatedProduct);
@@ -68,8 +68,8 @@ public class ProductController {
                 .body(productEntityModel);
     }
 
-    @DeleteMapping("/{productId}")
-    public ResponseEntity<?> delete(@PathVariable Long userId, @PathVariable Long productId) {
+    @DeleteMapping(params = "productId")
+    public ResponseEntity<?> delete(@PathVariable Long userId, @RequestParam Long productId) {
         productService.deleteById(userId, productId);
 
         return ResponseEntity.noContent().build();

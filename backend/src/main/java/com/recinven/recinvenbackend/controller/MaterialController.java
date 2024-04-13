@@ -37,8 +37,8 @@ public class MaterialController {
         return ResponseEntity.ok(CollectionModel.of(materials, linkTo(methodOn(MaterialController.class).all(userId)).withSelfRel()));
     }
 
-    @GetMapping("/{materialId}")
-    public ResponseEntity<?> one(@PathVariable Long userId, @PathVariable Long materialId) {
+    @GetMapping(params = "materialId")
+    public ResponseEntity<?> one(@PathVariable Long userId, @RequestParam Long materialId) {
         Material material = materialService.findById(userId, materialId);
 
         return ResponseEntity.ok(materialModelAssembler.toModel(material));
@@ -57,8 +57,8 @@ public class MaterialController {
                 .body(materialEntityModel);
     }
 
-    @PutMapping("/{materialId}")
-    public ResponseEntity<?> update(@PathVariable Long userId, @PathVariable Long materialId, @RequestBody MaterialDto materialDto) {
+    @PutMapping(params = "materialId")
+    public ResponseEntity<?> update(@PathVariable Long userId, @RequestParam Long materialId, @RequestBody MaterialDto materialDto) {
         Material updatedMaterial = materialService.updateById(userId, materialId, materialDto);
 
         EntityModel<Material> materialEntityModel = materialModelAssembler.toModel(updatedMaterial);
@@ -66,8 +66,8 @@ public class MaterialController {
                 .body(materialEntityModel);
     }
 
-    @DeleteMapping("/{materialId}")
-    public ResponseEntity<?> delete(@PathVariable Long userId, @PathVariable Long materialId) {
+    @DeleteMapping(params = "materialId")
+    public ResponseEntity<?> delete(@PathVariable Long userId, @RequestParam Long materialId) {
         materialService.deleteById(userId, materialId);
 
         return ResponseEntity.noContent().build();

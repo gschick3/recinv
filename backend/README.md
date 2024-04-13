@@ -44,22 +44,23 @@ _See [CURLS.md](./CURLS.md)_
       * Returns: `{"productId", "description", "currentPrice", "totalSold", "totalEarned"}`
     * POST
       * Required: `{"description", "currentPrice"}`
-    * `/{productId}`
+    * `?productId={productId}`
       * GET
       * PUT
-      * `/materials`
-        * GET
-          * Returns: `{"product", "material", "amount"}`
-        * `/{materialId}`
-          * GET
-          * POST
-            * Required: `{"amount"}`
-          * PUT
   * `/materials`
     * GET
       * Returns: `{"materialId", "brand", "description", "currentQuantity", "units", "currentCost", "totalPurchased", "totalSpent"}`
     * POST
       * Required: `{"brand", "description", "units", "currentCost"}`
-    * `/{materialId}`
+    * `?materialId={materialId}`
       * GET
       * PUT
+  * `/recipes`
+    * GET 
+      * Returns: `{"product", "material", "amount"}`
+    * `?productId={productId}`
+      * GET
+      * `&materialId={materialId}`
+        * POST
+          * Required: `{"amount"}`
+        * PUT
