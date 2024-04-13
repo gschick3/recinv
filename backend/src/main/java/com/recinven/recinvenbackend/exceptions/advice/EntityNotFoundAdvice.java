@@ -1,18 +1,16 @@
 package com.recinven.recinvenbackend.exceptions.advice;
 
-import com.recinven.recinvenbackend.exceptions.exception.ProductNotFoundException;
+import com.recinven.recinvenbackend.exceptions.exception.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ControllerAdvice
-public class ProductNotFoundAdvice {
+public class EntityNotFoundAdvice {
     @ResponseBody
-    @ExceptionHandler(ProductNotFoundException.class)
+    @ExceptionHandler(EntityNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    String productNotFoundHandler(ProductNotFoundException e) {
+    String entityNotFoundHandler(EntityNotFoundException e) {
         return e.getMessage();
     }
 }
