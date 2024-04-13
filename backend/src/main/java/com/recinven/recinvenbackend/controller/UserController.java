@@ -44,7 +44,7 @@ public class UserController {
     }
 
     @PutMapping("/{userId}")
-    ResponseEntity<?> update(@PathVariable Long userId, @RequestBody UserDto userDto) {
+    public ResponseEntity<?> update(@PathVariable Long userId, @RequestBody UserDto userDto) {
         User updatedUser = userService.updateById(userId, userDto);
 
         EntityModel<User> userEntityModel = userModelAssembler.toModel(updatedUser);
@@ -53,7 +53,7 @@ public class UserController {
     }
 
     @DeleteMapping( "/{userId}")
-    ResponseEntity<?> delete(@PathVariable Long userId) {
+    public ResponseEntity<?> delete(@PathVariable Long userId) {
         userService.deleteById(userId);
 
         return ResponseEntity.noContent().build();

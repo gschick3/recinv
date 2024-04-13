@@ -58,7 +58,7 @@ public class MaterialController {
     }
 
     @PutMapping("/{materialId}")
-    ResponseEntity<?> update(@PathVariable Long userId, @PathVariable Long materialId, @RequestBody MaterialDto materialDto) {
+    public ResponseEntity<?> update(@PathVariable Long userId, @PathVariable Long materialId, @RequestBody MaterialDto materialDto) {
         Material updatedMaterial = materialService.updateById(userId, materialId, materialDto);
 
         EntityModel<Material> materialEntityModel = materialModelAssembler.toModel(updatedMaterial);
@@ -67,7 +67,7 @@ public class MaterialController {
     }
 
     @DeleteMapping("/{materialId}")
-    ResponseEntity<?> delete(@PathVariable Long userId, @PathVariable Long materialId) {
+    public ResponseEntity<?> delete(@PathVariable Long userId, @PathVariable Long materialId) {
         materialService.deleteById(userId, materialId);
 
         return ResponseEntity.noContent().build();

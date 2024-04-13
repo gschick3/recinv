@@ -60,7 +60,7 @@ public class ProductController {
     }
 
     @PutMapping("/{productId}")
-    ResponseEntity<?> update(@PathVariable Long userId, @PathVariable Long productId, @RequestBody ProductDto productDto) {
+    public ResponseEntity<?> update(@PathVariable Long userId, @PathVariable Long productId, @RequestBody ProductDto productDto) {
         Product updatedProduct = productService.updateById(userId, productId, productDto);
 
         EntityModel<Product> productEntityModel = productModelAssembler.toModel(updatedProduct);
@@ -69,7 +69,7 @@ public class ProductController {
     }
 
     @DeleteMapping("/{productId}")
-    ResponseEntity<?> delete(@PathVariable Long userId, @PathVariable Long productId) {
+    public ResponseEntity<?> delete(@PathVariable Long userId, @PathVariable Long productId) {
         productService.deleteById(userId, productId);
 
         return ResponseEntity.noContent().build();
