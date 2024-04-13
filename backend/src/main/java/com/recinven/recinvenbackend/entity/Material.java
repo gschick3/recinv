@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.Set;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -31,19 +33,23 @@ public class Material {
 
     @Column(name = "current_quantity")
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private int currentQuantity;
+    private double currentQuantity;
 
-    @Column(name = "unit")
+    @Column(name = "unit", nullable = false)
     private String unit;
 
     @Column(name = "current_cost", nullable = false)
-    private float currentCost;
+    private double currentCost;
 
     @Column(name = "total_purchased")
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private int totalPurchased;
+    private double totalPurchased;
 
     @Column(name = "total_spent")
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private float totalSpent;
+    private double totalSpent;
+
+    @OneToMany(mappedBy = "material", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
+    private Set<ProductMaterial> productMaterials;
 }

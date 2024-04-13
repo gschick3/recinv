@@ -4,5 +4,5 @@ public class MaterialDto {
     public String brand;
     public String description;
     public String unit;
-    public float currentCost;
+    public double currentCost;
 }
