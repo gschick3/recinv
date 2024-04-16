@@ -13,6 +13,7 @@ import java.util.Set;
 @ToString
 @EqualsAndHashCode
 @Entity
+@Data
 @Table(name = "materials")
 public class Material {
     @Id
@@ -49,7 +50,8 @@ public class Material {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private double totalSpent;
 
-    @OneToMany(mappedBy = "material", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "material", cascade = CascadeType.ALL, targetEntity = ProductMaterial.class, fetch = FetchType.EAGER)
     @JsonIgnore
+    @EqualsAndHashCode.Exclude
     private Set<ProductMaterial> productMaterials;
 }

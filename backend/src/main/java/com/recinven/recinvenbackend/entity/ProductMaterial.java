@@ -11,6 +11,7 @@ import lombok.*;
 @ToString
 @EqualsAndHashCode
 @Entity
+@Data
 @IdClass(ProductMaterialId.class)
 @Table(name = "product_materials")
 public class ProductMaterial {
