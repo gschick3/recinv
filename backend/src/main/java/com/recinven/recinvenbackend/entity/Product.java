@@ -44,4 +44,9 @@ public class Product {
     @JsonIgnore
     @EqualsAndHashCode.Exclude
     private Set<ProductMaterial> productMaterials;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, targetEntity = Sale.class, fetch = FetchType.LAZY)
+    @JsonIgnore
+    @EqualsAndHashCode.Exclude
+    private Set<Sale> sales;
 }
