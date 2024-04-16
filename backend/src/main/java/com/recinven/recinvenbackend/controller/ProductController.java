@@ -4,7 +4,6 @@ import com.recinven.recinvenbackend.assembler.ProductModelAssembler;
 import com.recinven.recinvenbackend.dto.ProductDto;
 import com.recinven.recinvenbackend.entity.Product;
 import com.recinven.recinvenbackend.service.ProductService;
-import com.recinven.recinvenbackend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
@@ -24,7 +23,7 @@ public class ProductController {
     private final ProductService productService;
 
     @Autowired
-    public ProductController(ProductModelAssembler productModelAssembler, ProductService productService, UserService userService) {
+    public ProductController(ProductModelAssembler productModelAssembler, ProductService productService) {
         this.productModelAssembler = productModelAssembler;
         this.productService = productService;
     }
