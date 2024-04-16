@@ -22,13 +22,11 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 public class ProductController {
     private final ProductModelAssembler productModelAssembler;
     private final ProductService productService;
-    private final UserService userService;
 
     @Autowired
     public ProductController(ProductModelAssembler productModelAssembler, ProductService productService, UserService userService) {
         this.productModelAssembler = productModelAssembler;
         this.productService = productService;
-        this.userService = userService;
     }
 
     @GetMapping
@@ -48,13 +46,11 @@ public class ProductController {
 
     @PostMapping("/new")
     public ResponseEntity<?> create(@PathVariable Long userId, @RequestBody Product product) {
-        product.setUser(userService.findById(userId));
-
         if (productService.existsByDescription(product)) {
             return ResponseEntity.badRequest().body(String.format("User %d already has a product with description: %s", product.getUser().getUserId(), product.getDescription()));
         }
 
-        EntityModel<Product> productEntityModel = productModelAssembler.toModel(productService.create(product));
+        EntityModel<Product> productEntityModel = productModelAssembler.toModel(productService.create(userId, product));
         return ResponseEntity.created(productEntityModel.getRequiredLink(IanaLinkRelations.SELF).toUri())
                 .body(productEntityModel);
     }

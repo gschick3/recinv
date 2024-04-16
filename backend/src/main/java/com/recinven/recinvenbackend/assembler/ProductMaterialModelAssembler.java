@@ -17,6 +17,6 @@ public class ProductMaterialModelAssembler implements RepresentationModelAssembl
         Long userId = productMaterial.getProduct().getUser().getUserId();
         return EntityModel.of(productMaterial,
                 linkTo(methodOn(ProductMaterialController.class).one(userId, productMaterial.getProduct().getProductId(), productMaterial.getMaterial().getMaterialId())).withSelfRel(),
-                linkTo(methodOn(ProductMaterialController.class).all(userId, productMaterial.getProduct().getProductId())).withRel("productMaterial"));
+                linkTo(methodOn(ProductMaterialController.class).productAll(userId, productMaterial.getProduct().getProductId())).withRel("productMaterial"));
     }
 }

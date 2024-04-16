@@ -27,7 +27,7 @@ public class ProductService {
 
     public List<Product> findAll(Long userId) {
         User user = userService.findById(userId);
-        return productRepository.findAllByUser(user).orElseThrow(() -> new EntityNotFoundException(User.class, userId));
+        return productRepository.findAllByUser(user).orElseThrow(() -> new EntityNotFoundException(Product.class, user.getUserId()));
     }
 
     public Product findById(Long userId, Long productId) {
@@ -56,7 +56,9 @@ public class ProductService {
     }
 
     @Transactional
-    public Product create(Product product) {
+    public Product create(Long userId, Product product) {
+        User user = userService.findById(userId);
+        product.setUser(user);
         return productRepository.save(product);
     }
 

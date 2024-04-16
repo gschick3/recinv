@@ -4,7 +4,6 @@ import com.recinven.recinvenbackend.dto.ProductMaterialDto;
 import com.recinven.recinvenbackend.entity.Material;
 import com.recinven.recinvenbackend.entity.Product;
 import com.recinven.recinvenbackend.entity.ProductMaterial;
-import com.recinven.recinvenbackend.entity.User;
 import com.recinven.recinvenbackend.entity.idclass.ProductMaterialId;
 import com.recinven.recinvenbackend.exceptions.exception.EntityNotFoundException;
 import com.recinven.recinvenbackend.mapper.ProductMaterialMapper;
@@ -34,47 +33,52 @@ public class ProductMaterialService {
 
     public List<ProductMaterial> findAllByProduct(Long userId, Long productId) {
         Product product = productService.findById(userId, productId);
-        return productMaterialRepository.findAllByProduct(product).orElseThrow(() -> new EntityNotFoundException(User.class, userId));
+        return productMaterialRepository.findAllByProduct(product).orElseThrow(() -> new EntityNotFoundException(ProductMaterial.class, productId));
     }
 
     public List<ProductMaterial> findAllByMaterial(Long userId, Long materialId) {
         Material material = materialService.findById(userId, materialId);
-        return productMaterialRepository.findAllByMaterial(material).orElseThrow(() -> new EntityNotFoundException(User.class, userId));
+        return productMaterialRepository.findAllByMaterial(material).orElseThrow(() -> new EntityNotFoundException(ProductMaterial.class, materialId));
     }
 
-    public ProductMaterial findById(Long userId, ProductMaterialId productMaterialId) {
-        Product product = productService.findById(userId, productMaterialId.getProduct().getProductId());
-        Material material = materialService.findById(userId, productMaterialId.getMaterial().getMaterialId());
+    public ProductMaterial findById(Long userId, Long productId,  Long materialId) {
+        Product product = productService.findById(userId, productId);
+        Material material = materialService.findById(userId, materialId);
 
-        return productMaterialRepository.findByProductAndMaterial(product, material).orElseThrow(() -> new EntityNotFoundException(Material.class, productMaterialId.toString()));
+        return productMaterialRepository.findById(new ProductMaterialId(product, material))
+                .orElseThrow(() -> new EntityNotFoundException(ProductMaterial.class, String.format("%d %d", productId, materialId)));
     }
 
     @Transactional
-    public ProductMaterial updateById(Long userId, ProductMaterialId productMaterialId, ProductMaterialDto productMaterialDto) {
-        Product product = productService.findById(userId, productMaterialId.getProduct().getProductId());
-        Material material = materialService.findById(userId, productMaterialId.getMaterial().getMaterialId());
+    public ProductMaterial updateById(Long userId, Long productId, Long materialId, ProductMaterialDto productMaterialDto) {
+        Product product = productService.findById(userId, productId);
+        Material material = materialService.findById(userId, materialId);
 
-        return productMaterialRepository.findByProductAndMaterial(product, material)
+        return productMaterialRepository.findById(new ProductMaterialId(product, material))
                 .map(productMaterial -> {
                     productMaterialMapper.updateFromDto(productMaterialDto, productMaterial);
                     return productMaterialRepository.save(productMaterial);
                 })
-                .orElseThrow(() -> new EntityNotFoundException(Material.class, productMaterialId.toString()));
+                .orElseThrow(() -> new EntityNotFoundException(ProductMaterial.class, String.format("%d %d", productId, materialId)));
     }
 
-    public void deleteById(Long userId, ProductMaterialId productMaterialId) {
-        Product product = productService.findById(userId, productMaterialId.getProduct().getProductId());
-        Material material = materialService.findById(userId, productMaterialId.getMaterial().getMaterialId());
+    public void deleteById(Long userId, Long productId, Long materialId) {
+        Product product = productService.findById(userId, productId);
+        Material material = materialService.findById(userId, materialId);
+        ProductMaterialId productMaterialId = new ProductMaterialId(product, material);
 
-        if (productMaterialRepository.findByProductAndMaterial(product, material).isEmpty()) {
-            throw new EntityNotFoundException(Material.class, productMaterialId.toString());
+        if (productMaterialRepository.findById(productMaterialId).isEmpty()) {
+            throw new EntityNotFoundException(ProductMaterial.class, String.format("%d %d", productId, materialId));
         }
 
         productMaterialRepository.deleteById(productMaterialId);
     }
 
     @Transactional
-    public ProductMaterial create(ProductMaterial productMaterial) {
+    public ProductMaterial create(Long userId, Long productId, Long materialId, ProductMaterial productMaterial) {
+        productMaterial.setProduct(productService.findById(userId, productId));
+        productMaterial.setMaterial(materialService.findById(userId, materialId));
+
         return productMaterialRepository.save(productMaterial);
     }
 }

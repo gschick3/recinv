@@ -4,7 +4,6 @@ import com.recinven.recinvenbackend.assembler.MaterialModelAssembler;
 import com.recinven.recinvenbackend.dto.MaterialDto;
 import com.recinven.recinvenbackend.entity.Material;
 import com.recinven.recinvenbackend.service.MaterialService;
-import com.recinven.recinvenbackend.service.UserService;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.IanaLinkRelations;
@@ -21,12 +20,10 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 public class MaterialController {
     private final MaterialModelAssembler materialModelAssembler;
     private final MaterialService materialService;
-    private final UserService userService;
 
-    public MaterialController(MaterialModelAssembler materialModelAssembler, MaterialService materialService, UserService userService) {
+    public MaterialController(MaterialModelAssembler materialModelAssembler, MaterialService materialService) {
         this.materialModelAssembler = materialModelAssembler;
         this.materialService = materialService;
-        this.userService = userService;
     }
 
     @GetMapping
@@ -46,13 +43,11 @@ public class MaterialController {
 
     @PostMapping("/new")
     public ResponseEntity<?> create(@PathVariable Long userId, @RequestBody Material material) {
-        material.setUser(userService.findById(userId));
-
         if (materialService.existsByBrandAndDescription(material)) {
             return ResponseEntity.badRequest().body(String.format("User %d already has a material with brand: %s and description: %s", material.getUser().getUserId(), material.getBrand(), material.getDescription()));
         }
 
-        EntityModel<Material> materialEntityModel = materialModelAssembler.toModel(materialService.create(material));
+        EntityModel<Material> materialEntityModel = materialModelAssembler.toModel(materialService.create(userId, material));
         return ResponseEntity.created(materialEntityModel.getRequiredLink(IanaLinkRelations.SELF).toUri())
                 .body(materialEntityModel);
     }

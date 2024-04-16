@@ -2,13 +2,8 @@ package com.recinven.recinvenbackend.controller;
 
 import com.recinven.recinvenbackend.assembler.ProductMaterialModelAssembler;
 import com.recinven.recinvenbackend.dto.ProductMaterialDto;
-import com.recinven.recinvenbackend.entity.Material;
-import com.recinven.recinvenbackend.entity.Product;
 import com.recinven.recinvenbackend.entity.ProductMaterial;
-import com.recinven.recinvenbackend.entity.idclass.ProductMaterialId;
-import com.recinven.recinvenbackend.service.MaterialService;
 import com.recinven.recinvenbackend.service.ProductMaterialService;
-import com.recinven.recinvenbackend.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
@@ -26,51 +21,39 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 public class ProductMaterialController {
     private final ProductMaterialModelAssembler productMaterialModelAssembler;
     private final ProductMaterialService productMaterialService;
-    private final ProductService productService;
-    private final MaterialService materialService;
 
     @Autowired
-    public ProductMaterialController(ProductMaterialModelAssembler productMaterialModelAssembler, ProductMaterialService productMaterialService, ProductService productService, MaterialService materialService) {
+    public ProductMaterialController(ProductMaterialModelAssembler productMaterialModelAssembler, ProductMaterialService productMaterialService) {
         this.productMaterialModelAssembler = productMaterialModelAssembler;
         this.productMaterialService = productMaterialService;
-        this.productService = productService;
-        this.materialService = materialService;
     }
 
     @GetMapping
-    public ResponseEntity<?> all(@PathVariable Long userId, @RequestParam Long productId) {
+    public ResponseEntity<?> productAll(@PathVariable Long userId, @RequestParam Long productId) {
         List<EntityModel<ProductMaterial>> productMaterials = productMaterialService.findAllByProduct(userId, productId)
                 .stream()
                 .map(productMaterialModelAssembler::toModel)
                 .toList();
-        return ResponseEntity.ok(CollectionModel.of(productMaterials, linkTo(methodOn(ProductMaterialController.class).all(userId, productId)).withSelfRel()));
+        return ResponseEntity.ok(CollectionModel.of(productMaterials, linkTo(methodOn(ProductMaterialController.class).productAll(userId, productId)).withSelfRel()));
     }
 
     @GetMapping(params = "materialId")
     public ResponseEntity<?> one(@PathVariable Long userId, @RequestParam Long productId, @RequestParam Long materialId) {
-        Product product = productService.findById(userId, productId);
-        Material material = materialService.findById(userId, materialId);
-
-        ProductMaterial productMaterial = productMaterialService.findById(userId, new ProductMaterialId(product, material));
+        ProductMaterial productMaterial = productMaterialService.findById(userId, productId, materialId);
 
         return ResponseEntity.ok(productMaterialModelAssembler.toModel(productMaterial));
     }
 
-    @PostMapping(params = "materialId")
+    @PostMapping(path = "/new", params = "materialId")
     public ResponseEntity<?> create(@PathVariable Long userId, @RequestParam Long productId, @RequestParam Long materialId, @RequestBody ProductMaterial productMaterial) {
-        productMaterial.setProduct(productService.findById(userId, productId));
-        productMaterial.setMaterial(materialService.findById(userId, materialId));
-
-        EntityModel<ProductMaterial> productMaterialEntityModel = productMaterialModelAssembler.toModel(productMaterialService.create(productMaterial));
+        EntityModel<ProductMaterial> productMaterialEntityModel = productMaterialModelAssembler.toModel(productMaterialService.create(userId, productId, materialId, productMaterial));
         return ResponseEntity.created(productMaterialEntityModel.getRequiredLink(IanaLinkRelations.SELF).toUri())
                 .body(productMaterialEntityModel);
     }
 
     @PutMapping(params = "materialId")
     public ResponseEntity<?> update(@PathVariable Long userId, @RequestParam Long productId, @RequestParam Long materialId, @RequestBody ProductMaterialDto productMaterialDto) {
-        Product product = productService.findById(userId, productId);
-        Material material = materialService.findById(userId, materialId);
-        ProductMaterial updatedProductMaterial = productMaterialService.updateById(userId, new ProductMaterialId(product, material), productMaterialDto);
+        ProductMaterial updatedProductMaterial = productMaterialService.updateById(userId, productId, materialId, productMaterialDto);
 
         EntityModel<ProductMaterial> productMaterialEntityModel = productMaterialModelAssembler.toModel(updatedProductMaterial);
         return ResponseEntity.created(productMaterialEntityModel.getRequiredLink(IanaLinkRelations.SELF).toUri())
@@ -79,9 +62,7 @@ public class ProductMaterialController {
 
     @DeleteMapping(params = "materialId")
     public ResponseEntity<?> delete(@PathVariable Long userId, @RequestParam Long productId, @RequestParam Long materialId) {
-        Product product = productService.findById(userId, productId);
-        Material material = materialService.findById(userId, materialId);
-        productMaterialService.deleteById(userId, new ProductMaterialId(product, material));
+        productMaterialService.deleteById(userId, productId, materialId);
 
         return ResponseEntity.noContent().build();
     }

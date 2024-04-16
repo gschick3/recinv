@@ -56,7 +56,8 @@ public class MaterialService {
     }
 
     @Transactional
-    public Material create(Material material) {
+    public Material create(Long userId, Material material) {
+        material.setUser(userService.findById(userId));
         return materialRepository.save(material);
     }
 
