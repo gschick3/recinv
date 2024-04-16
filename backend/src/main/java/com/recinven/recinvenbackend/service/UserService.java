@@ -71,7 +71,6 @@ public class UserService {
         String jwt = jwtUtils.generateJwtToken(authentication);
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         return new JwtResponse(jwt, userDetails.getId());
-                //userDetails.getUsername());
     }
 
     @Transactional
