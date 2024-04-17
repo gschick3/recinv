@@ -30,12 +30,12 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    ResponseEntity<?> register(@RequestBody User user) {
-        if (userService.existsByEmail(user.getEmail()) && user.getEmail() != null) {
+    public ResponseEntity<?> register(@RequestBody User user) {
+        if (userService.existsByEmail(user.getEmail())) {
             return ResponseEntity.badRequest().body("There is already an account registered with that email.");
         }
 
-        if (userService.existsByPhone(user.getPhone()) && user.getPhone() != null) {
+        if (userService.existsByPhone(user.getPhone())) {
             return ResponseEntity.badRequest().body("There is already an account registered with that phone number.");
         }
 

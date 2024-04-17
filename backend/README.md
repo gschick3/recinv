@@ -37,17 +37,30 @@ _See [CURLS.md](./CURLS.md)_
   * GET
     * Returns: `{"userId", "email", "phone", "dateFormat"}`
   * PUT
-    * Expects:
-      * Optional: `{"name", "email", "password", "phone", "dateFormat"}`
-    * Returns:
-      * `{"userId", "email", "phone", "dateFormat"}`
+    * Optional: `{"name", "email", "password", "phone", "dateFormat"}`
+    * Returns: `{"userId", "email", "phone", "dateFormat"}`
   * `/products`
     * GET
-      * Returns: `{"user", "description", "currentPrice", "totalSold", "totalEarned"}`
+      * Returns: `{"productId", "description", "currentPrice", "totalSold", "totalEarned"}`
     * POST
-      * Expects:
-        * Required: `{"description", "currentPrice"}`
-        * Optional: `{"totalSold", "totalEarned"}`
-    * `/{productId}`
+      * Required: `{"description", "currentPrice"}`
+    * `?productId={productId}`
       * GET
       * PUT
+  * `/materials`
+    * GET
+      * Returns: `{"materialId", "brand", "description", "currentQuantity", "units", "currentCost", "totalPurchased", "totalSpent"}`
+    * POST
+      * Required: `{"brand", "description", "units", "currentCost"}`
+    * `?materialId={materialId}`
+      * GET
+      * PUT
+  * `/recipes`
+    * GET 
+      * Returns: `{"product", "material", "amount"}`
+    * `?productId={productId}`
+      * GET
+      * `&materialId={materialId}`
+        * POST
+          * Required: `{"amount"}`
+        * PUT

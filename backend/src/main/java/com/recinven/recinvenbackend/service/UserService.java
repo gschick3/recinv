@@ -2,7 +2,7 @@ package com.recinven.recinvenbackend.service;
 
 import com.recinven.recinvenbackend.dto.UserDto;
 import com.recinven.recinvenbackend.entity.User;
-import com.recinven.recinvenbackend.exceptions.exception.UserNotFoundException;
+import com.recinven.recinvenbackend.exceptions.exception.EntityNotFoundException;
 import com.recinven.recinvenbackend.mapper.UserMapper;
 import com.recinven.recinvenbackend.payload.response.JwtResponse;
 import com.recinven.recinvenbackend.repository.UserRepository;
@@ -41,7 +41,7 @@ public class UserService {
     }
 
     public User findById(Long userId) {
-        return userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
+        return userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException(User.class, userId));
     }
 
     @Transactional
@@ -51,10 +51,10 @@ public class UserService {
         }
         return userRepository.findById(userId)
                 .map(user -> {
-                    userMapper.updateUserFromDto(userDto, user);
+                    userMapper.updateFromDto(userDto, user);
                     return userRepository.save(user);
                 })
-                .orElseThrow(() -> new UserNotFoundException(userId));
+                .orElseThrow(() -> new EntityNotFoundException(User.class, userId));
     }
 
     public void deleteById(Long userId) {
@@ -71,7 +71,6 @@ public class UserService {
         String jwt = jwtUtils.generateJwtToken(authentication);
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         return new JwtResponse(jwt, userDetails.getId());
-                //userDetails.getUsername());
     }
 
     @Transactional
@@ -82,10 +81,10 @@ public class UserService {
     }
 
     public boolean existsByEmail(String email) {
-        return userRepository.existsByEmail(email);
+        return email != null && userRepository.existsByEmail(email);
     }
 
     public boolean existsByPhone(String phone) {
-        return userRepository.existsByPhone(phone);
+        return phone != null && userRepository.existsByPhone(phone);
     }
 }

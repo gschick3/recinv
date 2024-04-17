@@ -14,39 +14,44 @@ import java.util.Set;
 @EqualsAndHashCode
 @Entity
 @Data
-@Table(name = "products")
-public class Product {
+@Table(name = "materials")
+public class Material {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "product_id")
-    private Long productId;
+    @Column(name = "material_id")
+    private Long materialId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     @JsonIgnore
     private User user;
 
+    @Column(name = "brand", nullable = false)
+    private String brand;
+
     @Column(name = "description", nullable = false)
     private String description;
 
-    @Column(name = "current_price", nullable = false)
-    private double currentPrice;
-
-    @Column(name = "total_sold")
+    @Column(name = "current_quantity")
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private int totalSold;
+    private double currentQuantity;
 
-    @Column(name = "total_earned")
+    @Column(name = "unit", nullable = false)
+    private String unit;
+
+    @Column(name = "current_cost", nullable = false)
+    private double currentCost;
+
+    @Column(name = "total_purchased")
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private double totalEarned;
+    private double totalPurchased;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, targetEntity = ProductMaterial.class, fetch = FetchType.EAGER)
+    @Column(name = "total_spent")
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private double totalSpent;
+
+    @OneToMany(mappedBy = "material", cascade = CascadeType.ALL, targetEntity = ProductMaterial.class, fetch = FetchType.EAGER)
     @JsonIgnore
     @EqualsAndHashCode.Exclude
     private Set<ProductMaterial> productMaterials;
-
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, targetEntity = Sale.class, fetch = FetchType.LAZY)
-    @JsonIgnore
-    @EqualsAndHashCode.Exclude
-    private Set<Sale> sales;
 }

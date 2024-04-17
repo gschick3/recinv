@@ -4,7 +4,6 @@ import com.recinven.recinvenbackend.assembler.ProductModelAssembler;
 import com.recinven.recinvenbackend.dto.ProductDto;
 import com.recinven.recinvenbackend.entity.Product;
 import com.recinven.recinvenbackend.service.ProductService;
-import com.recinven.recinvenbackend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
@@ -22,13 +21,11 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 public class ProductController {
     private final ProductModelAssembler productModelAssembler;
     private final ProductService productService;
-    private final UserService userService;
 
     @Autowired
-    public ProductController(ProductModelAssembler productModelAssembler, ProductService productService, UserService userService) {
+    public ProductController(ProductModelAssembler productModelAssembler, ProductService productService) {
         this.productModelAssembler = productModelAssembler;
         this.productService = productService;
-        this.userService = userService;
     }
 
     @GetMapping
@@ -39,8 +36,8 @@ public class ProductController {
         return ResponseEntity.ok(CollectionModel.of(products, linkTo(methodOn(ProductController.class).all(userId)).withSelfRel()));
     }
 
-    @GetMapping("/{productId}")
-    public ResponseEntity<?> one(@PathVariable Long userId, @PathVariable Long productId) {
+    @GetMapping(params = "productId")
+    public ResponseEntity<?> one(@PathVariable Long userId, @RequestParam Long productId) {
         Product product = productService.findById(userId, productId);
 
         return ResponseEntity.ok(productModelAssembler.toModel(product));
@@ -52,15 +49,13 @@ public class ProductController {
             return ResponseEntity.badRequest().body(String.format("User %d already has a product with description: %s", product.getUser().getUserId(), product.getDescription()));
         }
 
-        product.setUser(userService.findById(userId));
-
-        EntityModel<Product> productEntityModel = productModelAssembler.toModel(productService.create(product));
+        EntityModel<Product> productEntityModel = productModelAssembler.toModel(productService.create(userId, product));
         return ResponseEntity.created(productEntityModel.getRequiredLink(IanaLinkRelations.SELF).toUri())
                 .body(productEntityModel);
     }
 
-    @PutMapping("/{productId}")
-    ResponseEntity<?> update(@PathVariable Long userId, @PathVariable Long productId, @RequestBody ProductDto productDto) {
+    @PutMapping(params = "productId")
+    public ResponseEntity<?> update(@PathVariable Long userId, @RequestParam Long productId, @RequestBody ProductDto productDto) {
         Product updatedProduct = productService.updateById(userId, productId, productDto);
 
         EntityModel<Product> productEntityModel = productModelAssembler.toModel(updatedProduct);
@@ -68,8 +63,8 @@ public class ProductController {
                 .body(productEntityModel);
     }
 
-    @DeleteMapping("/{productId}")
-    ResponseEntity<?> delete(@PathVariable Long userId, @PathVariable Long productId) {
+    @DeleteMapping(params = "productId")
+    public ResponseEntity<?> delete(@PathVariable Long userId, @RequestParam Long productId) {
         productService.deleteById(userId, productId);
 
         return ResponseEntity.noContent().build();
