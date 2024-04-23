@@ -54,4 +54,18 @@ public class Material {
     @JsonIgnore
     @EqualsAndHashCode.Exclude
     private Set<ProductMaterial> productMaterials;
+
+    public void makeSale(double quantityUsed) {
+        currentQuantity -= quantityUsed;
+    }
+
+    public void makePurchase(double quantityPurchased) {
+        makePurchase(quantityPurchased, currentCost);
+    }
+
+    public void makePurchase(double quantityPurchased, double unitCost) {
+        currentQuantity += quantityPurchased;
+        totalPurchased += quantityPurchased;
+        totalSpent += quantityPurchased * unitCost;
+    }
 }
