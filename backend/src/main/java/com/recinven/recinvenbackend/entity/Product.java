@@ -49,4 +49,13 @@ public class Product {
     @JsonIgnore
     @EqualsAndHashCode.Exclude
     private Set<Sale> sales;
+
+    public void makeSale(int numSold) {
+        makeSale(numSold, currentPrice);
+    }
+
+    public void makeSale(int numSold, double unitPrice) {
+        totalSold += numSold;
+        totalEarned += numSold * unitPrice;
+    }
 }

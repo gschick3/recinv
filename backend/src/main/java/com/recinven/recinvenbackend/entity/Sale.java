@@ -38,4 +38,16 @@ public class Sale {
 
     @Column(name = "date", nullable = false)
     private Date date;
+
+    public void calculateUnitCost() {
+        unitCost = product.getProductMaterials()
+                .stream()
+                .mapToDouble(productMaterial ->
+                        productMaterial.getMaterial().getCurrentCost() * productMaterial.getAmount())
+                .sum();
+    }
+
+    public void calculateUnitPrice() {
+        unitPrice = product.getCurrentPrice();
+    }
 }
