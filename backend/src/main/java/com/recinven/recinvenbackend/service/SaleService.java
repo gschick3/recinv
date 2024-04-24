@@ -51,8 +51,25 @@ public class SaleService {
         Product product = productService.findById(userId, productId);
         return saleRepository.findById(new SaleId(transactionId, product))
                 .map(sale -> {
+                    int originalQuantitySold = sale.getQuantitySold();
                     saleMapper.updateFromDto(saleDto, sale);
-                    return saleRepository.save(sale);
+
+                    Sale result = saleRepository.save(sale);
+
+                    if (saleDto.quantitySold > 0) {
+                        int difference = saleDto.quantitySold - originalQuantitySold;
+
+                        result.getProduct().makeSale(difference, result.getUnitPrice());
+                        productService.create(userId, result.getProduct());
+
+                        result.getProduct().getProductMaterials()
+                                .forEach(productMaterial -> {
+                                    productMaterial.getMaterial().makeSale(productMaterial.getAmount() * difference);
+                                    materialService.create(userId, productMaterial.getMaterial());
+                                });
+                    }
+
+                    return result;
                 })
                 .orElseThrow(() -> new EntityNotFoundException(Sale.class, String.format("%d %d", productId, transactionId)));
     }
@@ -72,37 +89,27 @@ public class SaleService {
     public Sale create(Long userId, Long productId, Sale sale) {
         sale.setProduct(productService.findById(userId, productId));
 
-        System.out.println("Creating sale... :)");
-
-        sale.getProduct().getProductMaterials()
-                .forEach(productMaterial -> System.out.println(productMaterial.getMaterial().getBrand() + " " + productMaterial.getMaterial().getDescription()));
-
         // Set unit cost to sum of current cost of all materials used to create product
         if (sale.getUnitCost() == 0) {
-            sale.setUnitCost(
-                    sale.getProduct().getProductMaterials()
-                    .stream()
-                    .mapToDouble(productMaterial -> productMaterial.getMaterial().getCurrentCost() * productMaterial.getAmount()).sum()
-            );
+            sale.calculateUnitCost();
         }
 
         // Set unit price to current price of product
         if (sale.getUnitPrice() == 0) {
-            sale.setUnitPrice(sale.getProduct().getCurrentPrice());
+            sale.calculateUnitPrice();
         }
 
         // Make sale early in case it fails
         Sale result = saleRepository.save(sale);
 
         // Increase total sold and total earned of product sold
-        sale.getProduct().setTotalSold(sale.getProduct().getTotalSold() + sale.getQuantitySold());
-        sale.getProduct().setTotalEarned(sale.getProduct().getTotalEarned() + sale.getUnitPrice() * sale.getQuantitySold());
-        productService.create(userId, sale.getProduct());
+        result.getProduct().makeSale(result.getQuantitySold(), result.getUnitPrice());
+        productService.create(userId, result.getProduct());
 
         // Reduce current quantity of materials used
-        sale.getProduct().getProductMaterials()
+        result.getProduct().getProductMaterials()
                 .forEach(productMaterial -> {
-                    productMaterial.getMaterial().setCurrentQuantity(productMaterial.getMaterial().getCurrentQuantity() - productMaterial.getAmount() * sale.getQuantitySold());
+                    productMaterial.getMaterial().makeSale(productMaterial.getAmount() * result.getQuantitySold());
                     materialService.create(userId, productMaterial.getMaterial());
                 });
 
