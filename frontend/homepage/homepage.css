@@ -1,6 +1,7 @@
 body{
     background: linear-gradient(121deg, rgba(128,170,165,1) 46%, rgba(178,205,192,1) 100%) ;
 }
+
 .logo{
     font-family: 'Lobster Two';
     font-size: 60px;
@@ -39,7 +40,9 @@ body{
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
-    justify-content: space-around;
+    /*adjust the content of homepage to sit center to page*/
+    justify-content: center;
+    /*justify-content: space-around;*/
     align-items: flex-start;
     align-content: flex-start;
 }

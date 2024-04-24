@@ -1,13 +1,20 @@
-/* .logo{
-    font-family: 'Lobster Two';
-    font-size: 60px;
-    position:relative;
-    margin-left:46px;
-    top:-17px;
+/*could be changed in style.css to apply to all*/
+/*sets the color of navigation sections*/
+.navbar-light .navbar-nav .nav-link{
+    color: #80aaa5;
+}
+
+/*could be changed in style.css to apply to all*/
+/*sets the color of navigation sections*/
+.navbar-light .navbar-nav .nav-link.active{
     color: #597d7d;
-} */
+}
+
 body{
     background: white;
+}
+.navbar-light .navbar-nav .nav-link.active{
+    color: #597d7d;
 }
 h1 {
     font-family: 'Lato';
@@ -38,11 +45,13 @@ h1 {
     border-style: solid;
     border-radius: 25px;
     border-width: 15px;
-    border-color: #7FA9A4;
+    border-color: #597D7C;
     padding: 0px 20px 20px 20px;
     height: 90%;
     overflow: hidden;
     overflow-y: scroll;
+    /*sets color of scrollbar*/
+    scrollbar-color: #80AAA5 transparent;
 }
 
 .transaction-body {
@@ -67,7 +76,6 @@ h1 {
     justify-content: center;
 }
 .container { 
-    
     height: 100%;
     text-align: center; 
     line-height: 75px; 
@@ -77,13 +85,13 @@ h1 {
 
 
 ul {
-    overflow: scroll;
+    /*removed to fix scrollbar on all ul elements*/
+    /*overflow: scroll;*/
     margin: 0;
     padding: 0;
     text-align: left;
     font-size: 16px;
     color: #000000;
-    
 }
 
 
@@ -114,7 +122,9 @@ ul {
     top: 0;
     width: 100%;
     height: 100%;
-    overflow: auto;
+    overflow: scroll;
+    /*sets color of scrollbar*/
+    scrollbar-color: #80AAA5 transparent;
     display: none;
     filter: drop-shadow(5px 5px 15px #000000);
     justify-content: center;
@@ -139,7 +149,7 @@ ul {
 .popup-content {
     margin: 10% auto;
     padding: 20px;
-    width: 30%;
+    width: 40%;
     background: #F8f4f0;
     border-style:solid;
     border-width:12px;
@@ -151,6 +161,29 @@ ul {
 }
 .show {
     display: block;
+}
+
+.withdraw-form {
+    display: flex;
+    width: 100%;
+
+    .dropdown {
+        height: 100%;
+        flex: 2 1 auto;
+        font-size: 15px;
+        height: 100% !important;
+        background-color: #FFFFFF;
+        margin: 0 5px 0 5px;
+    }
+
+    .value {
+        flex: 1;
+        width: 120px;
+        font-size: 15px;
+        height: 100%;
+        margin: 0 5px 0 5px;
+        background-color: #FFFFFF;
+    }
 }
   
  button {
@@ -164,12 +197,16 @@ ul {
 
 .item-box {
     background-color: #D9D9D9;
+    /*added to allow scroll within item box*/
+    overflow-y: scroll;
 }
 
 .item-info {
     
     width: 100%;
     height: fit-content;
+    /*added to prevent popup from continuing to grow with more elements added*/
+    max-height: 12rem;
 
     .info {
         display: flex;
@@ -189,7 +226,4 @@ ul {
         margin-left: 15px;
         margin-right: 15px;
     }
-}
-.navbar-light .navbar-nav .nav-link{
-    color: #80aaa5;
 }

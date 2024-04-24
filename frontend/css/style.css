@@ -42,8 +42,13 @@
 
 .logo{
   font-family: 'Lobster Two';
-  font-size: 60px;}
-  /* color: #597d7d;} */
+  font-size: 60px;
+  color: #597d7d;
+} 
+
+.logo:hover{
+  color: black;
+}
 
 html {
   margin: 0;

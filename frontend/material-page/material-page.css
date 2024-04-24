@@ -32,10 +32,8 @@ h1{
     width: 90%;
     margin: auto;
     border-radius: 25px;
-}
-    /* height: 100%; */   /*this mess with my transaction tables for some reasons :(
     justify-content: space-between;
-
+}
 
 /*sets the size and placement of material information*/
 .tableItem{
@@ -44,11 +42,8 @@ h1{
     margin-bottom: 0px;
     padding-right: .5rem;
     overflow-y:scroll;
-    scrollbar-color: #b2cdc0 #fcfaf8;
-}
-
-.ps__thumb-x{
-    color: pink;
+    /*sets color of scrollbar*/
+    scrollbar-color: #80AAA5 transparent;
 }
 
 /*adds the curve to the header*/
@@ -197,4 +192,9 @@ tbody td:last-child{
 .btn.btn-primary{
     padding-left: 1rem;
     padding-right: 1rem;
+}
+
+#editButton{
+    background-color: transparent;
+    border: none;
 }
