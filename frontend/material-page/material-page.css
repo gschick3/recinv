@@ -42,6 +42,8 @@ h1{
     margin-bottom: 0px;
     padding-right: .5rem;
     overflow-y:scroll;
+    /*sets color of scrollbar*/
+    scrollbar-color: #80AAA5 transparent;
 }
 
 /*adds the curve to the header*/
@@ -190,4 +192,9 @@ tbody td:last-child{
 .btn.btn-primary{
     padding-left: 1rem;
     padding-right: 1rem;
+}
+
+#editButton{
+    background-color: transparent;
+    border: none;
 }

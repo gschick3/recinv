@@ -26,7 +26,6 @@ h1{
 .setting-container{
     display: flex;
     flex-direction: row;
-    justify-content: flex-start;
 }
 .padding{
     margin-top:50px;
@@ -46,8 +45,55 @@ h1{
     color: #597D7D;
     font-size: 1.2rem;
 }
-.pencil-style{
-    font-size: 24px;
+
+.editIcon{
+    color:#80aaa5;
+}
+
+.editIcon:hover{
+    color:#b2cdc0;
+}
+
+.btn{
+    color: white;
+    border: none;
+    border-radius: 25px;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    background-color: #80aaa5;
+}
+
+.btn:hover{
+    color: white;
+    background-color: #597D7D;
+}
+
+.signOutSpace{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.signOutOption{
     color: #80aaa5;
+    font-size: 20px;
+    padding: 2rem;
+}
+
+.pageContent{
+    display: flex; 
+    margin-left: 5rem;
+    margin-top: 1rem;
+}
+
+.formContainer{
+    margin-left: 3rem;
+}
+
+.updateSpace{
+    display: flex;
+    justify-content: center;
+    margin-top: 3rem;
+    font-size: larger;
 }
 
