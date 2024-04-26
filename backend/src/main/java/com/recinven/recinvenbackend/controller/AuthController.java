@@ -31,7 +31,7 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody User user) {
-        if (user.getEmail().isBlank() || user.getPassword.isBlank() || user.getName().isBlank()) {
+        if (user.getEmail().isBlank() || user.getPassword().isBlank() || user.getName().isBlank()) {
             return ResponseEntity.badRequest().body("Field cannot be empty.");
         }
 
