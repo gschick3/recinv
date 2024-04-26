@@ -1,20 +1,20 @@
-function getUser (username, password) {
-	const Http = new XMLHttpRequest();
-	const url='https://www.example.com/api/user';
-	const params = `username=${username}&password=${password}`
+async function loginUser (username, password) {
+	const url= 'http://127.0.0.1:8080/auth/login';
 
-    Http.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            console.log(this.responseText);
-        }
-    };
+    let body = JSON.stringify({
+            email: username,
+            password: password
+        });
 
-    Http.open('GET', url+"?"+params);
-	
-	Http.onreadystatechange = (e) => {
-		console.log(Http.responseText)
-		return Http.responseText;
-	}
+    let response = await fetch(url, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: body
+    })
+    let obj = await response.json();
+    return obj;
 }
 	
 
@@ -45,12 +45,14 @@ function getUser (username, password) {
 
 
 
-	signinBtn.addEventListener("click", () => {
-		let validUser = getUser(
+	signinBtn.addEventListener("click", async() => {
+		let validUser = await loginUser(
 			document.getElementById("username-field").value,
 			document.getElementById("password-field").value
 		)
-		if (validUser) {
+		if (validUser.tokenType == "Bearer") {
+            sessionStorage.setItem("token", validUser.accessToken);
+            sessionStorage.setItem("userId", validUser.userId);
 			window.location.href = "../homepage/homepage.html"
 		} else {
 			document.getElementById("alertError").innerHTML = "Username and/or password does not match";
