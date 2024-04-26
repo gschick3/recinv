@@ -23,23 +23,18 @@
 				<div class="col-md-6 loginBox">
 					<div class="login-wrap p-0">
 						<h3 class="mb-4 text-center logo">Recinven</h3>
+						<h5 id="alertError" class="text-center"></h5>
 						<form action="#" class="signin-form">
 						<div class="form-group">
-							<input type="text" class="form-control" placeholder="Username" required>
+							<input id="username-field" type="text" class="form-control" placeholder="Username" required>
 						</div>
 						<div class="form-group">
-						<input id="password-field" type="password" class="form-control" placeholder="Password" required>
-						<span toggle="#password-field" class="fa fa-fw fa-eye field-icon toggle-password"></span>
+							<input id="password-field" type="password" class="form-control" placeholder="Password" required>
+							<span toggle="#password-field" class="fa fa-fw fa-eye field-icon toggle-password"></span>
 						</div>
 						<div class="form-group text-center signinButton">
-							<a href="../homepage/homepage.html" class=" btn btn-primary px-3" role="button">
-								<span class="black-text">Sign In</span>
-							</a>
+							<button id="signinBtn" type="reset" class="btn btn-primary px-3">Sign In</button>
 						</div>
-					
-						<!-- <div class="form-group signinButton">
-							 <button type="submit" class="form-control btn btn-primary submit px-3"><a href ="../homepage/homepage.html" class = black-text> Sign In </a>  </button>
-						</div>  -->
 						</form>
 						<div class="form-group text-center lighter">
 							Don't have an account? &nbsp  <a href="Register.html"> Register</a>
@@ -53,9 +48,9 @@
 	
 
 	<script src="../js/jquery.min.js"></script>
-  <script src="../js/popper.js"></script>
-  <script src="../js/bootstrap.min.js"></script>
-  <script src="Login.js"></script>
+	<script src="../js/popper.js"></script>
+	<script src="../js/bootstrap.min.js"></script>
+	<script src="Login.js"></script>
 
 	</body>
 </html>

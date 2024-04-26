@@ -498,7 +498,7 @@ function popupDeposit(dataItem) {
         let liItem = document.createElement("li");
         liItem.setAttribute("class", "info")
         liItem.innerHTML = `${i+1}.<span class="card item fill">${item.desc}</span> <span class="card item">${item.qty}</span>`;
-        ulItem.appendChild(liItem);
+        ulItem.appendChild(liItem); 
     });
 
     let bodyText = `
@@ -516,6 +516,7 @@ function popupDeposit(dataItem) {
         <button id="closeDepositPopup">OK</button>
     `
     depositBody.innerHTML = bodyText;
+    addRow.addEventListener("click", addToList);
     closeDepositPopup.addEventListener("click", closePopup);
 }
 
@@ -554,7 +555,7 @@ function addToList() {
     lastItem.innerHTML = newItem.innerHTML;
 
     ul.appendChild(appendAddBtn());
-    addRow.addEventListener("click", addToList);
+    addRow.addEventListener("click", addToList); 
 
 }
 
@@ -566,9 +567,9 @@ function appendItem(id) {
             <select class="form-control dropdown" id="InputType${id}">
                 <option>1</option>
                 <option>2</option>
-                <option>3</option>
+                <option>3</option>    
                 <option>4</option>
-                <option>5</option>
+                <option>5</option>  
             </select>
             <input type="number" class="form-control value" id="InputCost${id}" aria-label="Cost" placeholder="Cost">
             <input type="number" class="form-control value" id="InputAmount${id}" placeholder="Amount">

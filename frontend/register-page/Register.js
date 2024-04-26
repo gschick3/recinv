@@ -23,25 +23,6 @@ function postUser (username, email, password) {
 	}
 }
 
-function getUser (username, password) {
-	const Http = new XMLHttpRequest();
-	const url='https://www.example.com/api/user';
-	const params = `username=${username}&password=${password}`
-
-    Http.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            console.log(this.responseText);
-        }
-    };
-
-    Http.open('GET', url+"?"+params);
-	
-	Http.onreadystatechange = (e) => {
-		console.log(Http.responseText)
-		return Http.responseText;
-	}
-}
-	
 
 (function($) {
 
@@ -68,11 +49,10 @@ function getUser (username, password) {
 	  }
 	});
 
-
-
-	signinBtn.addEventListener("click", () => {
-		let validUser = getUser(
-			document.getElementById("username-field").value,
+	registerBtn.addEventListener("click", () => {
+		let validUser = postUser(
+			document.getElementById("namename-field").value,
+			document.getElementById("email-field").value,
 			document.getElementById("password-field").value
 		)
 		if (validUser) {
