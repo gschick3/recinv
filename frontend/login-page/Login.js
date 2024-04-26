@@ -1,28 +1,3 @@
-function postUser (username, email, password) {
-	const Http = new XMLHttpRequest();
-	const url='https://www.example.com/api/user';
-	const userBody = {
-		"username": username,
-		"email": email,
-		"password": password
-	};
-
-    Http.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            console.log(this.responseText);
-        }
-    };
-
-    Http.open('POST', url);
-    Http.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-    Http.send(JSON.stringify(userBody));
-	
-	Http.onreadystatechange = (e) => {
-		console.log(Http.responseText)
-		return Http.responseText;
-	}
-}
-
 function getUser (username, password) {
 	const Http = new XMLHttpRequest();
 	const url='https://www.example.com/api/user';
