@@ -1,27 +1,21 @@
-function postUser (username, email, password) {
-	const Http = new XMLHttpRequest();
-	const url='https://www.example.com/api/user';
-	const userBody = {
-		"username": username,
-		"email": email,
-		"password": password
-	};
-
-    Http.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            console.log(this.responseText);
-        }
-    };
-
-    Http.open('POST', url);
-    Http.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-    Http.send(JSON.stringify(userBody));
-	
-	Http.onreadystatechange = (e) => {
-		console.log(Http.responseText)
-		return Http.responseText;
-	}
-}
+async function registerUser (name, email, password) {
+	const url='http://127.0.0.1:8080/auth/register';
+	let body = JSON.stringify({
+		name: name,
+		email: email,
+		password: password
+	});
+    
+    let response = await fetch(url, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: body
+    }) 
+    let obj = await response.json();
+    return obj;
+   }
 
 
 (function($) {
@@ -49,14 +43,15 @@ function postUser (username, email, password) {
 	  }
 	});
 
-	registerBtn.addEventListener("click", () => {
-		let validUser = postUser(
+	registerBtn.addEventListener("click", async() => {
+		let validUser = await registerUser(
 			document.getElementById("namename-field").value,
 			document.getElementById("email-field").value,
 			document.getElementById("password-field").value
 		)
-		if (validUser) {
-			window.location.href = "../homepage/homepage.html"
+
+		if (validUser.userId) {
+			window.location.href = "../login-page/Login.html"
 		} else {
 			document.getElementById("alertError").innerHTML = "Username and/or password does not match";
 		}
