@@ -194,7 +194,27 @@ tbody td:last-child{
     padding-right: 1rem;
 }
 
-#editButton{
+.editButton{
     background-color: transparent;
     border: none;
+}
+
+.form-control-sm{
+    border: none;
+    font-size: 15px;
+    padding: none; 
+    margin: none;
+}
+
+.checkMark{
+    color: #80aaa5;
+}
+
+.checkMark:hover{
+    color: #b2cdc0;
+}
+
+.startRow{
+    border-top-left-radius: 15px;
+    border-bottom-left-radius: 15px;
 }
