@@ -496,7 +496,7 @@ function closeWindow(event) {
 let currentDepositData = {}
 
 function popupDeposit(dataItem) {
-    currentDepositData = dataItem // override data everytime the popup opens
+    currentDepositData = dataItem // override data every time the popup opens
     let ulItem = document.createElement("ul");
     ulItem.setAttribute("id", "InputItemsList")
     ulItem.appendChild(appendDepositItem(1, dataItem.items));
@@ -561,16 +561,16 @@ function appendDepositAddBtn() {
     return liAddBtn;
 }
 
-// ======= Withdrawl List ========================
+// ======= Withdrawal List ========================
 
-let currentWithdrawlData = [];
+let currentWithdrawalData = [];
 
 function popupWithdraw(dataItem) {
-    currentWithdrawlData = dataItem.items; // Overwrite data everytime popup opens
+    currentWithdrawalData = dataItem.items; // Overwrite data every time popup opens
     let ulItem = document.createElement("ul");
     ulItem.setAttribute("id", "InputItemsList")
-    ulItem.appendChild(appendWithdrawlItem(1, dataItem.items));
-    ulItem.appendChild(appendWithdrawlAddBtn());
+    ulItem.appendChild(appendWithdrawalItem(1, dataItem.items));
+    ulItem.appendChild(appendWithdrawalAddBtn());
 
 
     let bodyText = `
@@ -584,37 +584,37 @@ function popupWithdraw(dataItem) {
             <ul id="itemList"></ul>
             ${ulItem.outerHTML}
         </div>
-        <button id="submitWithdrawlBtn" class="btn btn-primary px-3" style="margin-top: 15px;">Submit</button>
+        <button id="submitWithdrawalBtn" class="btn btn-primary px-3" style="margin-top: 15px;">Submit</button>
     `
     withdrawBody.innerHTML = bodyText;
-    addWithdrawlRow.addEventListener("click", addToWithdrawlList);
-    submitWithdrawlBtn.addEventListener("click", submitWithdrawList);
+    addWithdrawalRow.addEventListener("click", addToWithdrawalList);
+    submitWithdrawalBtn.addEventListener("click", submitWithdrawList);
 }
 
-function addToWithdrawlList() {
+function addToWithdrawalList() {
     let ul = document.getElementById("InputItemsList");
     let li = ul.getElementsByTagName("li");
 
 
     let lastItem = li[li.length - 1]; // because of zero index
     lastItem.setAttribute("id", li.length)
-    let newItem = appendWithdrawlItem(li.length, currentWithdrawlData.items);
+    let newItem = appendWithdrawalItem(li.length, currentWithdrawalData.items);
     lastItem.innerHTML = newItem.innerHTML;
 
-    ul.appendChild(appendWithdrawlAddBtn());
-    addWithdrawlRow.addEventListener("click", addToWithdrawlList);
+    ul.appendChild(appendWithdrawalAddBtn());
+    addWithdrawalRow.addEventListener("click", addToWithdrawalList);
 
 }
 
-function appendWithdrawlAddBtn() {
+function appendWithdrawalAddBtn() {
     let liAddBtn = document.createElement("li");
     liAddBtn.setAttribute("id", "InputLiTemp")
     liAddBtn.setAttribute("class", "info withdraw-form")
-    liAddBtn.innerHTML = `<button class="btn btn-primary" id="addWithdrawlRow" type="submit">+</button>`;
+    liAddBtn.innerHTML = `<button class="btn btn-primary" id="addWithdrawalRow" type="submit">+</button>`;
     return liAddBtn;
 }
 
-function appendWithdrawlItem(id, itemList) {
+function appendWithdrawalItem(id, itemList) {
     let itemListHtml = ""
     itemList.forEach(i => {
         console.log(i);
@@ -641,7 +641,6 @@ function appendWithdrawlItem(id, itemList) {
 function convertDepositToJSON(element) {
     var output = [];
     let ul = element.childNodes
-    console.log("meee", element)
     
     for (var i = 0; i < ul.length-1; i++) {
         let filteredInput = jQuery(ul[i].childNodes).filter('*') // Removes text nodes
@@ -654,7 +653,7 @@ function convertDepositToJSON(element) {
     return output;    
 }
 
-function convertWithdrawlsToJSON(element) {
+function convertWithdrawalsToJSON(element) {
     var output = [];
     let ul = element.childNodes
     
@@ -722,7 +721,7 @@ function submitWithdrawList() {
     // }
 
     let data = {
-        "id": currentWithdrawlData,
+        "id": currentWithdrawalData,
         "orderInfo": withdrawalOutput
     }
     closePopup()
