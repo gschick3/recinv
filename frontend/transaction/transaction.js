@@ -493,16 +493,13 @@ function closeWindow(event) {
 
 // ======= Deposit List ========================
 
+let currentDepositData = {}
+
 function popupDeposit(dataItem) {
+    currentDepositData = dataItem // override data everytime the popup opens
     let ulItem = document.createElement("ul");
     ulItem.setAttribute("id", "InputItemsList")
-    dataItem.items.forEach((item,i) => {
-        // let liItem = document.createElement("li");
-        // liItem.setAttribute("class", "info")
-        // liItem.innerHTML = `${i+1}.<span class="card item fill">${item.desc}</span> <span class="card item">${item.qty}</span>`;
-        let liItem = appendDepositItem(i, item);
-        ulItem.appendChild(liItem); 
-    });
+    ulItem.appendChild(appendDepositItem(1, dataItem.items));
     ulItem.appendChild(appendDepositAddBtn());
 
     let bodyText = `
@@ -528,30 +525,34 @@ function addToDepositList() {
     let ul = document.getElementById("InputItemsList");
     let li = ul.getElementsByTagName("li");
 
-    let tempItem = {
-        "desc": "New Item",
-        "qty": 1,
-        "cost": 69.69
-    }; // TODO: Update this to be a editable field
-
     let lastItem = li[li.length - 1]; // because of zero index
-    let newItem = appendDepositItem(li.length, tempItem);
+    let newItem = appendDepositItem(li.length, currentDepositData.items);
     lastItem.innerHTML = newItem.innerHTML;
 
     ul.appendChild(appendDepositAddBtn());
     addDepositRow.addEventListener("click", addToDepositList); 
 }
 
-function appendDepositItem(id, item) {
+function appendDepositItem(id, itemList) {
+    let itemListHtml = "";
+    itemList.forEach(i => { itemListHtml += `<option>${i.desc}</option>`});
+
     let liItem = document.createElement("li");
-    liItem.setAttribute("class", "info")
-    liItem.innerHTML = `${id+1}.<span class="card item fill">${item.desc}</span> <span class="card item">${item.qty}</span>`;
+    liItem.setAttribute("id", `${id}`)
+    liItem.setAttribute("class", "info withdraw-form")
+    liItem.innerHTML = `
+        <div style="padding: 3px 15px 0 0;">${id}.</div>
+        <select class="form-control dropdown" id="InputType${id}">
+            ${itemListHtml}
+        </select>
+        <input type="number" class="form-control value" id="InputAmount${id}" placeholder="Amount"> 
+    `;
     return liItem;
 }
 
 function appendDepositAddBtn() {
     let liAddBtn = document.createElement("li");
-    liAddBtn.setAttribute("class", "info")
+    liAddBtn.setAttribute("class", "info withdraw-form")
     liAddBtn.innerHTML = `
         <div class="withdraw-form">
             <button class="btn btn-primary" id="addDepositRow" type="submit">+</button>
@@ -562,10 +563,10 @@ function appendDepositAddBtn() {
 
 // ======= Withdrawl List ========================
 
-let currentItemList = [];
+let currentWithdrawlData = [];
 
 function popupWithdraw(dataItem) {
-    currentItemList = dataItem.items; // Overwrite items everytime popup opens so it is accessable
+    currentWithdrawlData = dataItem.items; // Overwrite data everytime popup opens
     let ulItem = document.createElement("ul");
     ulItem.setAttribute("id", "InputItemsList")
     ulItem.appendChild(appendWithdrawlItem(1, dataItem.items));
@@ -597,7 +598,7 @@ function addToWithdrawlList() {
 
     let lastItem = li[li.length - 1]; // because of zero index
     lastItem.setAttribute("id", li.length)
-    let newItem = appendWithdrawlItem(li.length, currentItemList);
+    let newItem = appendWithdrawlItem(li.length, currentWithdrawlData.items);
     lastItem.innerHTML = newItem.innerHTML;
 
     ul.appendChild(appendWithdrawlAddBtn());
@@ -646,8 +647,8 @@ function convertDepositToJSON(element) {
         let filteredInput = jQuery(ul[i].childNodes).filter('*') // Removes text nodes
         console.log("I is filtered", filteredInput)
         output.push({
-            "desc": filteredInput[0].value,
-            "qty": filteredInput[1].value,
+            "desc": filteredInput[1].value,
+            "qty": filteredInput[2].value,
         });
     }
     return output;    
@@ -673,10 +674,24 @@ function submitDepositList() {
     let depositOutput = convertDepositToJSON(root)
     console.log(depositOutput);
 
-    // FIXME: Implemenet API route here
+    // FIXME: Implement API route here
+    // NOTE: need to build the json payload
+    // {
+    //     "id": 1,
+    //     "orderInfo": [
+    //         {
+    //             "desc": 'Flower bookmark', 
+    //             "qty": '3
+    //         },
+    //         {
+    //             "desc": 'Enchanted bookmark', 
+    //             "qty": '5'
+    //         },
+    //     ]
+    // }
 
     let data = {
-        "id": 1,
+        "id": currentDepositData.id,
         "orderInfo": depositOutput
     }
 
@@ -685,14 +700,30 @@ function submitDepositList() {
 
 function submitWithdrawList() {
     let root = document.getElementById("InputItemsList");
-    let withdrawlOutput = convertWithdrawlsToJSON(root)
-    console.log(withdrawlOutput);
+    let withdrawalOutput = convertWithdrawalToJSON(root)
+    console.log(withdrawalOutput);
 
-    // FIXME: Implemenet API route here
+    // FIXME: Implement API route here
+    // NOTE: need to build the json payload
+    // {
+    //     "id": 1,
+    //     "orderInfo": [
+    //         {
+    //             "desc": 'Black yarn', 
+    //             "qty": '2'
+    //             "cost": '24.55'
+    //         },
+    //         {
+    //             "desc": 'Pink yarn', 
+    //             "qty": '4'
+    //             "cost": '32.44'
+    //         },
+    //     ]
+    // }
 
     let data = {
-        "id": 1,
-        "orderInfo": withdrawlOutput
+        "id": currentWithdrawlData,
+        "orderInfo": withdrawalOutput
     }
     closePopup()
 }
