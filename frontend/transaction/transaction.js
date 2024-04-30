@@ -110,7 +110,7 @@ let data = [
     {
         "id": 3,
         "date": "04/20/24",
-        "service": "Etsy",
+        "service": "Ebay",
         "cost": 42.69,
         "items": [
             {
@@ -491,15 +491,19 @@ function closeWindow(event) {
     }
 }
 
+// ======= Deposit List ========================
+
 function popupDeposit(dataItem) {
-    
     let ulItem = document.createElement("ul");
+    ulItem.setAttribute("id", "InputItemsList")
     dataItem.items.forEach((item,i) => {
-        let liItem = document.createElement("li");
-        liItem.setAttribute("class", "info")
-        liItem.innerHTML = `${i+1}.<span class="card item fill">${item.desc}</span> <span class="card item">${item.qty}</span>`;
+        // let liItem = document.createElement("li");
+        // liItem.setAttribute("class", "info")
+        // liItem.innerHTML = `${i+1}.<span class="card item fill">${item.desc}</span> <span class="card item">${item.qty}</span>`;
+        let liItem = appendDepositItem(i, item);
         ulItem.appendChild(liItem); 
     });
+    ulItem.appendChild(appendDepositAddBtn());
 
     let bodyText = `
         <h3>Sale Information</h3>
@@ -513,19 +517,92 @@ function popupDeposit(dataItem) {
             <ul id="itemList"></ul>
             ${ulItem.outerHTML}
         </div>
-        <button id="closeDepositPopup">OK</button>
+        <button id="submitDepositBtn" class="btn btn-primary px-3" style="margin-top: 15px;">Submit</button>
     `
     depositBody.innerHTML = bodyText;
-    addRow.addEventListener("click", addToList);
-    closeDepositPopup.addEventListener("click", closePopup);
+    addDepositRow.addEventListener("click", addToDepositList);
+    submitDepositBtn.addEventListener("click", submitDepositList);
 }
 
-function popupWithdraw(dataItem) {
+function addToDepositList() {
+    let ul = document.getElementById("InputItemsList");
+    let li = ul.getElementsByTagName("li");
+
+    let tempItem = {
+        "desc": "New Item",
+        "qty": 1,
+        "cost": 69.69
+    }; // TODO: Update this to be a editable field
+
+    let lastItem = li[li.length - 1]; // because of zero index
+    let newItem = appendDepositItem(li.length, tempItem);
+    lastItem.innerHTML = newItem.innerHTML;
+
+    ul.appendChild(appendDepositAddBtn());
+    addDepositRow.addEventListener("click", addToDepositList); 
+}
+
+function appendDepositItem(id, item) {
+    let liItem = document.createElement("li");
+    liItem.setAttribute("class", "info")
+    liItem.innerHTML = `${id+1}.<span class="card item fill">${item.desc}</span> <span class="card item">${item.qty}</span>`;
+    return liItem;
+}
+
+function appendDepositAddBtn() {
+    let liAddBtn = document.createElement("li");
+    liAddBtn.setAttribute("class", "info")
+    liAddBtn.innerHTML = `
+        <div class="withdraw-form">
+            <button class="btn btn-primary" id="addDepositRow" type="submit">+</button>
+        </div>
+    `;
+    return liAddBtn;
+}
+
+function submitDepositList() {
+    console.log("TODO: Make this an OK button and grab all value for submission")
+    let root = document.getElementById("InputItemsList");
+    let depositOutput = convertDepositToJSON(root)
+    console.log(depositOutput);
+
+    // FIXME: Implemenet API route here
+
+    let data = {
+        "id": 1,
+        "orderInfo": depositOutput
+    }
+
+    closePopup()
+}
+
+function convertDepositToJSON(element) {
+    var output = [];
+    let ul = element.childNodes
+    console.log("meee", element)
     
+    for (var i = 0; i < ul.length-1; i++) {
+        let filteredInput = jQuery(ul[i].childNodes).filter('*') // Removes text nodes
+        console.log("I is filtered", filteredInput)
+        output.push({
+            "desc": filteredInput[0].value,
+            "qty": filteredInput[1].value,
+        });
+    }
+    return output;    
+}
+
+
+// ======= Withdrawl List ========================
+
+let currentItemList = [];
+
+function popupWithdraw(dataItem) {
+    currentItemList = dataItem.items; // Overwrite items everytime popup opens so it is accessable
     let ulItem = document.createElement("ul");
     ulItem.setAttribute("id", "InputItemsList")
-    ulItem.appendChild(appendItem(1));
-    ulItem.appendChild(appendAddBtn());
+    ulItem.appendChild(appendWithdrawlItem(1, dataItem.items));
+    ulItem.appendChild(appendWithdrawlAddBtn());
 
 
     let bodyText = `
@@ -539,55 +616,84 @@ function popupWithdraw(dataItem) {
             <ul id="itemList"></ul>
             ${ulItem.outerHTML}
         </div>
-        <button id="closeWithdrawPopup">OK</button>
+        <button id="submitWithdrawlBtn" class="btn btn-primary px-3" style="margin-top: 15px;">Submit</button>
     `
     withdrawBody.innerHTML = bodyText;
-    addRow.addEventListener("click", addToList);
-    closeWithdrawPopup.addEventListener("click", closePopup); // TODO: Make this an OK button and grab all value for submission
+    addWithdrawlRow.addEventListener("click", addToWithdrawlList);
+    submitWithdrawlBtn.addEventListener("click", submitWithdrawList);
 }
 
-function addToList() {
+function addToWithdrawlList() {
     let ul = document.getElementById("InputItemsList");
     let li = ul.getElementsByTagName("li");
 
+
     let lastItem = li[li.length - 1]; // because of zero index
-    let newItem = appendItem(li.length);
+    lastItem.setAttribute("id", li.length)
+    let newItem = appendWithdrawlItem(li.length, currentItemList);
     lastItem.innerHTML = newItem.innerHTML;
 
-    ul.appendChild(appendAddBtn());
-    addRow.addEventListener("click", addToList); 
+    ul.appendChild(appendWithdrawlAddBtn());
+    addWithdrawlRow.addEventListener("click", addToWithdrawlList);
 
 }
 
-function appendItem(id) {
+function appendWithdrawlAddBtn() {
+    let liAddBtn = document.createElement("li");
+    liAddBtn.setAttribute("id", "InputLiTemp")
+    liAddBtn.setAttribute("class", "info withdraw-form")
+    liAddBtn.innerHTML = `<button class="btn btn-primary" id="addWithdrawlRow" type="submit">+</button>`;
+    return liAddBtn;
+}
+
+function appendWithdrawlItem(id, itemList) {
+    let itemListHtml = ""
+    itemList.forEach(i => {
+        console.log(i);
+        itemListHtml += `<option>${i.desc}</option>`
+    })
+
     let liItem = document.createElement("li");
-    liItem.setAttribute("class", "info")
+    liItem.setAttribute("id", `${id}`)
+    liItem.setAttribute("class", "info withdraw-form")
     liItem.innerHTML = `
-        <div class="withdraw-form">
-            <select class="form-control dropdown" id="InputType${id}">
-                <option>1</option>
-                <option>2</option>
-                <option>3</option>    
-                <option>4</option>
-                <option>5</option>  
-            </select>
-            <input type="number" class="form-control value" id="InputCost${id}" aria-label="Cost" placeholder="Cost">
-            <input type="number" class="form-control value" id="InputAmount${id}" placeholder="Amount">
-        </div>
+        <select class="form-control dropdown" id="InputType${id}">
+            ${itemListHtml}
+        </select>
+        <input type="number" class="form-control value" id="InputCost${id}" aria-label="Cost" placeholder="Cost">
+        <input type="number" class="form-control value" id="InputAmount${id}" placeholder="Amount"> 
     `;
 
     return liItem;
 }
 
-function appendAddBtn() {
-    let liAddBtn = document.createElement("li");
-    liAddBtn.setAttribute("class", "info")
-    liAddBtn.innerHTML = `
-        <div class="withdraw-form">
-            <button class="btn btn-primary" id="addRow" type="submit">+</button>
-        </div>
-    `;
-    return liAddBtn;
+function submitWithdrawList() {
+    let root = document.getElementById("InputItemsList");
+    let withdrawlOutput = convertWithdrawlsToJSON(root)
+    console.log(withdrawlOutput);
+
+    // FIXME: Implemenet API route here
+
+    let data = {
+        "id": 1,
+        "orderInfo": withdrawlOutput
+    }
+    closePopup()
+}
+
+function convertWithdrawlsToJSON(element) {
+    var output = [];
+    let ul = element.childNodes
+    
+    for (var i = 0; i < ul.length-1; i++) {
+        let filteredInput = jQuery(ul[i].childNodes).filter('*') // Removes text nodes
+        output.push({
+            "type": filteredInput[0].value,
+            "cost": filteredInput[1].value,
+            "amount": filteredInput[2].value,
+        });
+    }
+    return output;    
 }
 
 
