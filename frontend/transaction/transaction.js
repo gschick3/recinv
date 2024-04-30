@@ -560,39 +560,6 @@ function appendDepositAddBtn() {
     return liAddBtn;
 }
 
-function submitDepositList() {
-    console.log("TODO: Make this an OK button and grab all value for submission")
-    let root = document.getElementById("InputItemsList");
-    let depositOutput = convertDepositToJSON(root)
-    console.log(depositOutput);
-
-    // FIXME: Implemenet API route here
-
-    let data = {
-        "id": 1,
-        "orderInfo": depositOutput
-    }
-
-    closePopup()
-}
-
-function convertDepositToJSON(element) {
-    var output = [];
-    let ul = element.childNodes
-    console.log("meee", element)
-    
-    for (var i = 0; i < ul.length-1; i++) {
-        let filteredInput = jQuery(ul[i].childNodes).filter('*') // Removes text nodes
-        console.log("I is filtered", filteredInput)
-        output.push({
-            "desc": filteredInput[0].value,
-            "qty": filteredInput[1].value,
-        });
-    }
-    return output;    
-}
-
-
 // ======= Withdrawl List ========================
 
 let currentItemList = [];
@@ -667,18 +634,23 @@ function appendWithdrawlItem(id, itemList) {
     return liItem;
 }
 
-function submitWithdrawList() {
-    let root = document.getElementById("InputItemsList");
-    let withdrawlOutput = convertWithdrawlsToJSON(root)
-    console.log(withdrawlOutput);
 
-    // FIXME: Implemenet API route here
+// ===============+ API calls ====================
 
-    let data = {
-        "id": 1,
-        "orderInfo": withdrawlOutput
+function convertDepositToJSON(element) {
+    var output = [];
+    let ul = element.childNodes
+    console.log("meee", element)
+    
+    for (var i = 0; i < ul.length-1; i++) {
+        let filteredInput = jQuery(ul[i].childNodes).filter('*') // Removes text nodes
+        console.log("I is filtered", filteredInput)
+        output.push({
+            "desc": filteredInput[0].value,
+            "qty": filteredInput[1].value,
+        });
     }
-    closePopup()
+    return output;    
 }
 
 function convertWithdrawlsToJSON(element) {
@@ -696,6 +668,34 @@ function convertWithdrawlsToJSON(element) {
     return output;    
 }
 
+function submitDepositList() {
+    let root = document.getElementById("InputItemsList");
+    let depositOutput = convertDepositToJSON(root)
+    console.log(depositOutput);
+
+    // FIXME: Implemenet API route here
+
+    let data = {
+        "id": 1,
+        "orderInfo": depositOutput
+    }
+
+    closePopup()
+}
+
+function submitWithdrawList() {
+    let root = document.getElementById("InputItemsList");
+    let withdrawlOutput = convertWithdrawlsToJSON(root)
+    console.log(withdrawlOutput);
+
+    // FIXME: Implemenet API route here
+
+    let data = {
+        "id": 1,
+        "orderInfo": withdrawlOutput
+    }
+    closePopup()
+}
 
 
 (function() {
