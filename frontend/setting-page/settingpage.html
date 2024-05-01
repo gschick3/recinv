@@ -16,7 +16,7 @@
 
 </head>
 
-<body class="full-page">
+<body class="full-page" onload="onLoad()">
 
   <!--Navigation Bar-->
   <nav class="navbar navbar-expand-lg navbar-light bg-light navbar-custom">
@@ -60,7 +60,7 @@
   <div class="signOutSpace">
     <h1>Settings and Profile</h1>
     <a class="signOutOption" href="../login-page/Login.html">
-      <button class="btn">Sign Out</button>
+      <button id="signoutButton" class="btn">Sign Out</button>
     </a>
   </div>
 
@@ -161,6 +161,6 @@
     <button class="btn">Update</button>
   </div>
 
+  <script src="settingpage.js"></script>
 </body>
-
 </html>

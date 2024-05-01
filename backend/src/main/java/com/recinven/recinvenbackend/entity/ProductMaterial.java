@@ -16,13 +16,13 @@ import lombok.*;
 @Table(name = "product_materials")
 public class ProductMaterial {
     @Id
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "product_id")
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Product product;
 
     @Id
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "material_id")
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Material material;

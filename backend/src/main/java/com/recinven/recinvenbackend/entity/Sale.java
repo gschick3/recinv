@@ -22,7 +22,7 @@ public class Sale {
     private Long transactionId;
 
     @Id
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "product_id")
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Product product = new Product();

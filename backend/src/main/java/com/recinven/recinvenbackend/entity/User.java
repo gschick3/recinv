@@ -36,12 +36,12 @@ public class User {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY) // stop from displaying in JSON responses
     private String password;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonIgnore
     @EqualsAndHashCode.Exclude
     private Set<Product> products;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonIgnore
     @EqualsAndHashCode.Exclude
     private Set<Material> materials;

@@ -11,7 +11,7 @@
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 	<link rel="stylesheet" href="../css/style.css">
 	
-	<link rel="stylesheet" href="Login.css">
+	<link rel="stylesheet" href="Register.css">
 
 	</head>
 	<body>
@@ -25,21 +25,21 @@
 						<h3 class="mb-4 text-center logo">Recinven</h3>
 						<form action="#" class="signin-form">
 						<div class="form-group">
-							<input type="text" class="form-control" placeholder="Full name" required>
+							<input id="namename-field" type="text" class="form-control" placeholder="Full name" required>
 						</div>
                         <div class="form-group">
-							<input type="text" class="form-control" placeholder="Email" required>
+							<input id="email-field" type="text" class="form-control" placeholder="Email" required>
 						</div>
 						<div class="form-group">
-						<input id="password-field" type="password" class="form-control" placeholder="Password" required>
+							<input id="password-field" type="password" class="form-control" placeholder="Password" required>
 						<span toggle="#password-field" class="fa fa-fw fa-eye field-icon toggle-password"></span>
 						</div>
 						<div class="form-group signinButton">
-							<button type="submit" class="form-control btn btn-primary submit px-3">Register</button>
+							<button id="registerBtn" type="reset" class="form-control btn btn-primary submit px-3">Register</button>
 						</div>
 						</form>
 						<div class="form-group text-center lighter">
-							Already have an account? &nbsp  <a href="Login.html"> Sign In</a>
+							Already have an account? &nbsp  <a href="../login-page/Login.html"> Sign In</a>
 						
 						</div>
 					</div>
@@ -52,7 +52,7 @@
 	<script src="../js/jquery.min.js"></script>
   <script src="../js/popper.js"></script>
   <script src="../js/bootstrap.min.js"></script>
-  <script src="Login.js"></script>
+  <script src="Register.js"></script>
 
 	</body>
 </html>
