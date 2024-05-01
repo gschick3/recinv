@@ -144,11 +144,16 @@ async function getAllMaterials() {
             "Authorization": `Bearer ${sessionStorage.getItem("token")}`,
             "Accept": "application/json"
         }
-    })
+    });
 
     let data = await response.json();
 
     clearMaterialTable();
+
+    if (!data._embedded) {
+        return;
+    }
+    
     data._embedded.materialList.forEach((material) => {
         addMaterialRow(material.materialId, material.description, material.brand, material.currentCost, material.currentQuantity, material.totalSpent);
     });
