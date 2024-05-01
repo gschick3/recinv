@@ -1,10 +1,10 @@
-async function loginUser (username, password) {
-	const url= 'http://127.0.0.1:8080/auth/login';
+const url= 'http://127.0.0.1:8080/auth/login';
 
+async function loginUser (username, password) {
     let body = JSON.stringify({
-            email: username,
-            password: password
-        });
+		email: username, 
+		password: password
+	});
 
     let response = await fetch(url, {
         method: "POST",

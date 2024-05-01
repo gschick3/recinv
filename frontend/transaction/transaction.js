@@ -1,8 +1,10 @@
 'use strict'
 
+const BASE_URL = `http://127.0.0.1:8080/users/${sessionStorage.getItem("userId")}`
+
 let data = [
     {
-        "id": 1,
+        "id": 12,
         "date": "03/17/24",
         "service": "Etsy",
         "cost": 25.69,
@@ -35,7 +37,7 @@ let data = [
         ]
     },
     {
-        "id": 2,
+        "id": 13,
         "date": "04/20/24",
         "service": "Etsy",
         "cost": 36.47,
@@ -53,7 +55,7 @@ let data = [
         ]
     },
     {
-        "id": 3,
+        "id": 14,
         "date": "04/20/24",
         "service": "Etsy",
         "cost": 4.35,
@@ -72,7 +74,7 @@ let data = [
         ]
     },
     {
-        "id": 4,
+        "id": 15,
         "date": "04/20/24",
         "service": "Etsy",
         "cost": 35.69,
@@ -90,7 +92,7 @@ let data = [
         ]
     },
     {
-        "id": 5,
+        "id": 16,
         "date": "04/20/24",
         "service": "Etsy",
         "cost": 32.69,
@@ -108,9 +110,9 @@ let data = [
         ]
     },
     {
-        "id": 3,
+        "id": 17,
         "date": "04/20/24",
-        "service": "Etsy",
+        "service": "Ebay",
         "cost": 42.69,
         "items": [
             {
@@ -126,7 +128,7 @@ let data = [
         ]
     },
     {
-        "id": 3,
+        "id": 18,
         "date": "04/20/24",
         "service": "Etsy",
         "cost": 12.39,
@@ -144,7 +146,7 @@ let data = [
         ]
     },
     {
-        "id": 3,
+        "id": 19,
         "date": "04/20/24",
         "service": "Etsy",
         "cost": 8.53,
@@ -162,7 +164,7 @@ let data = [
         ]
     },
     {
-        "id": 3,
+        "id": 20,
         "date": "04/20/24",
         "service": "Etsy",
         "cost": 23.65,
@@ -180,7 +182,7 @@ let data = [
         ]
     },
     {
-        "id": 12.39,
+        "id": 21,
         "date": "04/20/24",
         "service": "Etsy",
         "cost": 4.69,
@@ -198,7 +200,7 @@ let data = [
         ]
     },
     {
-        "id": 8.47,
+        "id": 22,
         "date": "04/20/24",
         "service": "Etsy",
         "cost": 42.69,
@@ -216,7 +218,7 @@ let data = [
         ]
     },
     {
-        "id": 3,
+        "id": 23,
         "date": "04/20/24",
         "service": "PEtsy",
         "cost": 45.89,
@@ -238,7 +240,7 @@ let data = [
 
 let withdrawData = [
     {
-        "id": 9,
+        "id": 1,
         "date": "03/17/24",
         "service": "JOANN",
         "cost":74.69,
@@ -257,7 +259,7 @@ let withdrawData = [
     },
     
     {
-        "id": 7,
+        "id": 2,
         "date": "03/17/24",
         "service": "Michaels Store",
         "cost":54.69,
@@ -282,7 +284,7 @@ let withdrawData = [
         ]
     },
     {
-        "id": 9,
+        "id": 3,
         "date": "03/17/24",
         "service": "JOANN",
         "cost":33.45,
@@ -300,7 +302,7 @@ let withdrawData = [
         ]
     },
     {
-        "id": 7,
+        "id": 4,
         "date": "03/17/24",
         "service": "Michaels Store",
         "cost": 14.69,
@@ -314,7 +316,7 @@ let withdrawData = [
         ]
     },
     {
-        "id": 7,
+        "id": 5,
         "date": "03/17/24",
         "service": "Michaels Store",
         "cost": 14.69,
@@ -328,7 +330,7 @@ let withdrawData = [
         ]
     },
     {
-        "id": 7,
+        "id": 6,
         "date": "03/17/24",
         "service": "Premier Yarn",
         "cost": 19.35,
@@ -371,7 +373,7 @@ let withdrawData = [
         ]
     },
     {
-        "id": 7,
+        "id": 8,
         "date": "03/17/24",
         "service": "Premier Yarn",
         "cost": 45.67,
@@ -403,7 +405,7 @@ let withdrawData = [
         ]
     },
     {
-        "id": 9,
+        "id": 10,
         "date": "03/17/24",
         "service": "JOANN",
         "cost":13.45,
@@ -421,7 +423,7 @@ let withdrawData = [
         ]
     },
     {
-        "id": 9,
+        "id": 11,
         "date": "03/17/24",
         "service": "JOANN",
         "cost":13.45,
@@ -465,7 +467,7 @@ function getDataById(dataItem, id) {
         // Note: id is itemId<id> I.e., itemId1
         function(dataItem){ return "itemId" + dataItem.id == id }
     );
-    console.log(foundData, id, dataItem)
+    //console.log(foundData, id, dataItem)
     return foundData[0]
 }
 
@@ -491,17 +493,24 @@ function closeWindow(event) {
     }
 }
 
-function popupDeposit(dataItem) {
-    
+// ======= Deposit List ========================
+var allProducts = [];
+
+async function popupDeposit(dataItem) {
+    let allSales = await getAllSales(dataItem.id);
+    allProducts = await getAllProducts();
+
     let ulItem = document.createElement("ul");
-    dataItem.items.forEach((item,i) => {
-        let liItem = document.createElement("li");
-        liItem.setAttribute("class", "info")
-        liItem.innerHTML = `${i+1}.<span class="card item fill">${item.desc}</span> <span class="card item">${item.qty}</span>`;
-        ulItem.appendChild(liItem); 
+    ulItem.setAttribute("id", "InputItemsList");
+    let itemCount = 0;
+
+    allSales.forEach(saleItem => {
+        ulItem.appendChild(newDepositSoldItem(++itemCount, saleItem.product.description, saleItem.quantitySold));
     });
 
-    let bodyText = `
+    ulItem.appendChild(appendDepositAddBtn());
+
+    depositBody.innerHTML = `
         <h3>Sale Information</h3>
         <div class="info">
             <div class="info-data">${dataItem.date}</div>
@@ -511,24 +520,86 @@ function popupDeposit(dataItem) {
         <h5>Item(s) Sold</h5>
         <div class="card item-info item-box">
             <ul id="itemList"></ul>
-            ${ulItem.outerHTML}
+            <!-- append ulItem here -->
         </div>
-        <button id="closeDepositPopup">OK</button>
-    `
-    depositBody.innerHTML = bodyText;
-    addRow.addEventListener("click", addToList);
-    closeDepositPopup.addEventListener("click", closePopup);
+        <button id="submitDepositBtn" class="btn btn-primary px-3" style="margin-top: 15px;">Submit</button>
+    `;
+
+    document.getElementById("itemList").parentElement.appendChild(ulItem);
+    document.getElementById("submitDepositBtn").addEventListener("click", createSubmitDepositList(dataItem.id, dataItem.date));
 }
 
-function popupWithdraw(dataItem) {
-    
+function addToDepositList() {
+    let ul = document.getElementById("InputItemsList");
+    let li = ul.getElementsByTagName("li");
+
+    let lastItem = li[li.length - 1]; // because of zero index
+    let newItem = newDepositSoldItem(li.length, "", "", );
+    lastItem.innerHTML = newItem.innerHTML;
+
+    ul.appendChild(appendDepositAddBtn());
+}
+
+function newDepositSoldItem(listNum, description, quantity) {
+    let itemListHtml = "";
+
+    allProducts.forEach(i => {
+        itemListHtml += `<option prodId="${i.productId}" ${i.description == description ? "selected" : ""}>${i.description}</option>`;
+    });
+
+    let liItem = document.createElement("li");
+    liItem.setAttribute("id", `${listNum}`)
+    liItem.setAttribute("class", "info withdraw-form")
+    liItem.innerHTML = `
+        <div style="padding: 3px 15px 0 0;">${listNum}.</div>
+        <select class="form-control dropdown" id="InputType${listNum}" value="${description}">
+            ${itemListHtml}
+        </select>
+        <input type="number" class="form-control value" id="InputAmount${listNum}" placeholder="Amount" value="${quantity}">
+    `;
+    return liItem;
+}
+
+function appendDepositAddBtn() {
+    let liAddBtn = document.createElement("li");
+    let div = document.createElement("div");
+    let button = document.createElement("button");
+
+    liAddBtn.setAttribute("class", "info withdraw-form");
+    div.setAttribute("class", "withdraw-form");
+    button.setAttribute("class", "btn btn-primary");
+    button.setAttribute("id", "addDepositRow");
+    button.setAttribute("type", "submit");
+    button.innerHTML = "+";
+    button.addEventListener('click', addToDepositList);
+
+    div.appendChild(button);
+    liAddBtn.appendChild(div);
+
+    return liAddBtn;
+}
+
+// ======= Withdrawal List ========================
+
+let allMaterials = [];
+
+async function popupWithdraw(dataItem) {
+    let allPurchases = await getAllPurchases(dataItem.id);
+    allMaterials = await getAllMaterials();
+
     let ulItem = document.createElement("ul");
     ulItem.setAttribute("id", "InputItemsList")
-    ulItem.appendChild(appendItem(1));
-    ulItem.appendChild(appendAddBtn());
+    let itemCount = 0;
+
+    allPurchases.forEach(purchaseItem => {
+        ulItem.appendChild(newWithdrawalPurchasedItem(++itemCount, purchaseItem.material.brand, 
+            purchaseItem.material.description, purchaseItem.unitCost, purchaseItem.quantityPurchased));
+    });
+
+    ulItem.appendChild(appendWithdrawalAddBtn());
 
 
-    let bodyText = `
+    withdrawBody.innerHTML = `
         <h3>Purchase Information</h3>
         <div class="info">
             <div class="info-data">${dataItem.date}</div>
@@ -537,59 +608,232 @@ function popupWithdraw(dataItem) {
         <h5>Item(s) Sold</h5>
         <div class="card item-info item-box">
             <ul id="itemList"></ul>
-            ${ulItem.outerHTML}
+            <!-- append ulItem here -->
         </div>
-        <button id="closeWithdrawPopup">OK</button>
-    `
-    withdrawBody.innerHTML = bodyText;
-    addRow.addEventListener("click", addToList);
-    closeWithdrawPopup.addEventListener("click", closePopup); // TODO: Make this an OK button and grab all value for submission
+        <button id="submitWithdrawalBtn" class="btn btn-primary px-3" style="margin-top: 15px;">Submit</button>
+    `;
+
+    document.getElementById("itemList").parentElement.appendChild(ulItem);
+    document.getElementById("submitWithdrawalBtn").addEventListener("click", createSubmitWithdrawalList(dataItem.id, dataItem.date));
 }
 
-function addToList() {
+function addToWithdrawalList() {
     let ul = document.getElementById("InputItemsList");
     let li = ul.getElementsByTagName("li");
 
+
     let lastItem = li[li.length - 1]; // because of zero index
-    let newItem = appendItem(li.length);
+    lastItem.setAttribute("id", li.length)
+    let newItem = newWithdrawalPurchasedItem(li.length, "", "", );
     lastItem.innerHTML = newItem.innerHTML;
 
-    ul.appendChild(appendAddBtn());
-    addRow.addEventListener("click", addToList); 
-
+    ul.appendChild(appendWithdrawalAddBtn());
 }
 
-function appendItem(id) {
+function appendWithdrawalAddBtn() {
+    let liAddBtn = document.createElement("li");
+    let button = document.createElement("button");
+    let div = document.createElement("div");
+
+    liAddBtn.setAttribute("id", "InputLiTemp")
+    liAddBtn.setAttribute("class", "info withdraw-form")
+    div.setAttribute("class", "withdraw-form");
+    button.setAttribute("class", "btn btn-primary");
+    button.setAttribute("id", "addWithdrawalRow");
+    button.setAttribute("type", "submit");
+    button.innerHTML = "+";
+    button.addEventListener('click', addToWithdrawalList);
+
+    div.appendChild(button);
+    liAddBtn.appendChild(div);
+
+    return liAddBtn;
+}
+
+function newWithdrawalPurchasedItem(listNum, brand, description, cost, quantity) {
+    let itemListHtml = ""
+
+    allMaterials.forEach(i => {
+        itemListHtml += `<option matId="${i.materialId}" ${i.brand == brand && i.description == description ? "selected" : ""}>${i.brand} - ${i.description}</option>`
+    });
+
     let liItem = document.createElement("li");
-    liItem.setAttribute("class", "info")
+    liItem.setAttribute("id", `${listNum}`)
+    liItem.setAttribute("class", "info withdraw-form")
     liItem.innerHTML = `
-        <div class="withdraw-form">
-            <select class="form-control dropdown" id="InputType${id}">
-                <option>1</option>
-                <option>2</option>
-                <option>3</option>    
-                <option>4</option>
-                <option>5</option>  
-            </select>
-            <input type="number" class="form-control value" id="InputCost${id}" aria-label="Cost" placeholder="Cost">
-            <input type="number" class="form-control value" id="InputAmount${id}" placeholder="Amount">
-        </div>
+        <select class="form-control dropdown" id="InputType${listNum}" value="${brand} - ${description}">
+            ${itemListHtml}
+        </select>
+        <input type="number" step="0.01" class="form-control value" id="InputCost${listNum}" aria-label="Cost" placeholder="Cost" value="${cost}">
+        <input type="number" step="0.01" class="form-control value" id="InputAmount${listNum}" placeholder="Amount" value="${quantity}"> 
     `;
 
     return liItem;
 }
 
-function appendAddBtn() {
-    let liAddBtn = document.createElement("li");
-    liAddBtn.setAttribute("class", "info")
-    liAddBtn.innerHTML = `
-        <div class="withdraw-form">
-            <button class="btn btn-primary" id="addRow" type="submit">+</button>
-        </div>
-    `;
-    return liAddBtn;
+
+// ===============+ API calls ====================
+
+function convertDepositToJSON(element) {
+    var output = [];
+    let ul = element.childNodes
+    
+    for (var i = 0; i < ul.length-1; i++) {
+        let filteredInput = jQuery(ul[i].childNodes).filter('*') // Removes text nodes
+        //console.log("I is filtered", filteredInput)
+        output.push({
+            "prodId": filteredInput[1].options[filteredInput[1].selectedIndex].getAttribute('prodId'),
+            "qty": filteredInput[2].value,
+        });
+    }
+    return output;    
 }
 
+function convertWithdrawalsToJSON(element) {
+    var output = [];
+    let ul = element.childNodes
+    
+    for (var i = 0; i < ul.length-1; i++) {
+        let filteredInput = jQuery(ul[i].childNodes).filter('*') // Removes text nodes
+        output.push({
+            "matId": filteredInput[0].options[filteredInput[0].selectedIndex].getAttribute('matId'),
+            "cost": filteredInput[1].value,
+            "qty": filteredInput[2].value,
+        });
+    }
+    return output;    
+}
+
+async function getAllSales(transactionId) {
+    let response = await fetch(`${BASE_URL}/sales?transactionId=${transactionId}`, {
+        method: "GET",
+        headers: {
+            "Authorization": `Bearer ${sessionStorage.getItem("token")}`,
+            "Accept": "application/json"
+        }
+    });
+
+    let data = await response.json();
+
+    if (!data._embedded) {
+        return [];
+    }
+
+    return data._embedded.saleList;
+}
+
+async function getAllPurchases(transactionId) {
+    let response = await fetch(`${BASE_URL}/purchases?transactionId=${transactionId}`, {
+        method: "GET",
+        headers: {
+            "Authorization": `Bearer ${sessionStorage.getItem("token")}`,
+            "Accept": "application/json"
+        }
+    });
+
+    let data = await response.json();
+
+    if (!data._embedded) {
+        return [];
+    }
+
+    return data._embedded.purchaseList;
+}
+
+async function getAllProducts() {
+    let response = await fetch(`${BASE_URL}/products`, {
+        method: "GET",
+        headers: {
+            "Authorization": `Bearer ${sessionStorage.getItem("token")}`,
+            "Accept": "application/json"
+        }
+    });
+
+    let data = await response.json();
+
+    if (!data._embedded) {
+        return [];
+    }
+
+    return data._embedded.productList;
+}
+
+async function getAllMaterials() {
+    let response = await fetch(`${BASE_URL}/materials`, {
+        method: "GET",
+        headers: {
+            "Authorization": `Bearer ${sessionStorage.getItem("token")}`,
+            "Accept": "application/json"
+        }
+    });
+
+    let data = await response.json();
+
+    if (!data._embedded) {
+        return [];
+    }
+
+    return data._embedded.materialList;
+}
+
+function createSubmitDepositList(transactionId, date) {
+    return function submitDepositList(event) {
+        event.preventDefault;
+
+        let root = document.getElementById("InputItemsList");
+        let data = convertDepositToJSON(root);
+
+        data.forEach(sale => {
+            let body = JSON.stringify({
+                transactionId: transactionId,
+                date: Date.parse(date),
+                quantitySold: sale["qty"]
+            });
+
+            fetch(`${BASE_URL}/sales/new?productId=${sale["prodId"]}`, {
+                method: "POST",
+                headers: {
+                    "Authorization": `Bearer ${sessionStorage.getItem("token")}`,
+                    "Accept": "application/json",
+                    "Content-Type": "application/json"
+                },
+                body: body
+            });
+        });
+
+        closePopup();
+    }
+}
+
+function createSubmitWithdrawalList(transactionId, date) {
+    return function submitWithdrawList(event) {
+        event.preventDefault;
+
+        let root = document.getElementById("InputItemsList");
+        let data = convertWithdrawalsToJSON(root);
+
+        data.forEach(purchase => {
+            let body = JSON.stringify({
+                transactionId: transactionId,
+                date: Date.parse(date),
+                quantityPurchased: purchase["qty"],
+                unitCost: purchase["cost"]
+            });
+
+            fetch(`${BASE_URL}/purchases/new?materialId=${purchase["matId"]}`, {
+                method: "POST",
+                headers: {
+                    "Authorization": `Bearer ${sessionStorage.getItem("token")}`,
+                    "Accept": "application/json",
+                    "Content-Type": "application/json"
+                },
+                body: body
+            });
+        });
+
+        closePopup();
+    }
+}
 
 
 (function() {

@@ -21,7 +21,7 @@ public class Product {
     @Column(name = "product_id")
     private Long productId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     @JsonIgnore
     private User user;
@@ -45,7 +45,7 @@ public class Product {
     @EqualsAndHashCode.Exclude
     private Set<ProductMaterial> productMaterials;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, targetEntity = Sale.class, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, targetEntity = Sale.class, fetch = FetchType.EAGER)
     @JsonIgnore
     @EqualsAndHashCode.Exclude
     private Set<Sale> sales;
