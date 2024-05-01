@@ -13,6 +13,6 @@ import java.util.Optional;
 
 public interface PurchaseRepository extends JpaRepository<Purchase, PurchaseId> {
     @Query("SELECT purchase FROM Purchase purchase WHERE purchase.material.user = :user AND purchase.transactionId = :transactionId")
-    Optional<List<Purchase>> findAllByUserAndTransactionId(@Param("User")User user, @Param("transactionId") Long transactionId);
+    Optional<List<Purchase>> findAllByUserAndTransactionId(@Param("user")User user, @Param("transactionId") Long transactionId);
     Optional<List<Purchase>> findAllByMaterial(Material material);
 }
